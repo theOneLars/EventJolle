@@ -1,5 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.signalk;
 
+import ch.zuehlke.hatch.sailingserver.frontend.WebSocketController;
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscibtionFactory;
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscription;
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscriptionPath;
@@ -13,10 +14,10 @@ public class SignalKController {
 
     private static final Logger log = LoggerFactory.getLogger(SignalKService.class);
 
-    SignalKService signalKService;
+    private SignalKService signalKService;
 
     @Autowired
-    public SignalKController(SignalKService signalKService) {
+    public SignalKController(SignalKService signalKService, WebSocketController webSocketController) {
         this.signalKService = signalKService;
         log.info("Server info from SignalK server: " + getFullServerInfo());
         startWebsocketConnection();
@@ -29,6 +30,11 @@ public class SignalKController {
         subscribeToSignalKServer(subscription);
     }
 
+    /**
+     * Returns full vessel info with all information about the connected vessel
+     *
+     * @return
+     */
     public Object getFullServerInfo() {
         return signalKService.getFullServerInfo();
     }

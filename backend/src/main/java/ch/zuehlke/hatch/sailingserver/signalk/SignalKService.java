@@ -1,10 +1,12 @@
 package ch.zuehlke.hatch.sailingserver.signalk;
 
+import ch.zuehlke.hatch.sailingserver.frontend.WebSocketController;
 import ch.zuehlke.hatch.sailingserver.signalk.model.info.ServerInfo;
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscription;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,10 +20,16 @@ public class SignalKService {
 
     private static final Logger log = LoggerFactory.getLogger(SignalKService.class);
 
-    private final  String SIGNALK_HOST = "localhost";
-    private final  String SIGNALK_PORT = "3000";
+    private final String SIGNALK_HOST = "localhost";
+    private final String SIGNALK_PORT = "3000";
 
     private WebsocketClientEndpoint clientEndPoint;
+    private WebSocketController webSocketController;
+
+    @Autowired
+    public SignalKService(WebSocketController webSocketController) {
+        this.webSocketController = webSocketController;
+    }
 
     public Object getFullServerInfo() {
         RestTemplate restTemplate = new RestTemplate();
@@ -43,7 +51,10 @@ public class SignalKService {
     public void startWebsocketConection() {
         try {
             clientEndPoint = new WebsocketClientEndpoint(getSignalKServerUri());
-            clientEndPoint.addMessageHandler(message -> log.info("Message in SignalKService: " + message));
+            clientEndPoint.addMessageHandler(message -> {
+                log.info("Message in SignalKService: " + message);
+                webSocketController.publish(message);
+            });
         } catch (URISyntaxException e) {
             log.error("Could not start websocket connection", e);
         }
