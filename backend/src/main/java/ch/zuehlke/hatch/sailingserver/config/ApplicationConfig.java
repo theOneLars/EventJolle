@@ -17,8 +17,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
 
     public final static String MODEL_BROKER_PATH = "/model";
-    public final static String MODEL_BROKER_UPDATE_PATH = "/update";
-
     public final static String ENDPOINT_SOCKET_PATH = "/socket";
     public final static String APPLICATION_DESTINATION_PREFIX = "/app";
 
