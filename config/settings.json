@@ -1,0 +1,69 @@
+{
+  "vessel": {
+    "name": "Volare",
+    "brand": "Friendship",
+    "type": "22",
+    "uuid": "urn:mrn:signalk:uuid:c0d79334-4e25-4245-8892-54e8ccc8021d"
+  },
+  "pipedProviders": [
+    {
+      "id": "nmeaFromFile",
+      "pipeElements": [
+        {
+          "type": "providers/filestream",
+          "options": {
+            "filename": "samples/plaka.log",
+            "providerId": "nmeaFromFile"
+          },
+          "optionMappings": [
+            {
+              "fromAppProperty": "argv.nmeafilename",
+              "toOption": "filename"
+            }
+          ]
+        },
+        {
+          "type": "providers/throttle",
+          "options": {
+            "rate": 1000,
+            "providerId": "nmeaFromFile"
+          }
+        },
+        {
+          "type": "providers/liner"
+        },
+        {
+          "type": "providers/nmea0183-signalk",
+          "options": {
+            "sentenceEvent": "nmea0183-B",
+            "providerId": "nmeaFromFile"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SailingSimulator",
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "SignalK",
+            "subOptions": {
+              "validateChecksum": true,
+              "type": "udp",
+              "port": "4123"
+            }
+          }
+        }
+      ],
+      "enabled": true
+    }
+  ],
+  "vessels": {
+    "self": {
+      "uuid": "urn:mrn:signalk:uuid:b8e01192-2e24-447b-8be9-03c9a4e59143"
+    }
+  },
+  "interfaces": {}
+}
