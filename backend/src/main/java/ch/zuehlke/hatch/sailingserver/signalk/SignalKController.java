@@ -22,10 +22,10 @@ public class SignalKController {
         startWebsocketConnection();
         SignalKSubscription subscription = SignalKSubscibtionFactory.createDefaultSubscriptionWithSinglePath(
                 "*",
-                2000,
+                1000,
                 SignalKSubscriptionPath.FORMAT_DELTA,
                 SignalKSubscriptionPath.POLICY_INSTANT,
-                2000);
+                1000);
         subscribeToSignalKServer(subscription);
     }
 

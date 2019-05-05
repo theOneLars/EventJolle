@@ -43,7 +43,7 @@ public class SignalKService {
     public void startWebsocketConection() {
         try {
             clientEndPoint = new WebsocketClientEndpoint(getSignalKServerUri());
-            clientEndPoint.addMessageHandler(message -> log.debug("Message in SignalKService: " + message));
+            clientEndPoint.addMessageHandler(message -> log.info("Message in SignalKService: " + message));
         } catch (URISyntaxException e) {
             log.error("Could not start websocket connection", e);
         }
