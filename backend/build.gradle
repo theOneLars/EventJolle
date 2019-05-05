@@ -5,6 +5,13 @@ plugins {
 
 apply plugin: 'io.spring.dependency-management'
 
+bootJar {
+	into('static') {
+		from('../frontend/dist/frontend/')
+	}
+}
+bootJar.dependsOn ":frontend:npm_run_dist"
+
 repositories {
 	mavenCentral()
 }
