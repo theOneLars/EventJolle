@@ -1,6 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.signalk;
 
-import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscibtionFactory;
+import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscriptionFactory;
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscriptionPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class WebsocketClientEndpoint {
     }
 
     private String getInitialSubscription() {
-        return SignalKSubscibtionFactory.createDefaultSubscriptionWithSinglePath(
+        return SignalKSubscriptionFactory.createDefaultSubscriptionWithSinglePath(
                     "*",
                     1000,
                     SignalKSubscriptionPath.FORMAT_DELTA,
