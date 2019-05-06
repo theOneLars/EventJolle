@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="SailingServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="Start Backend" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="backend_main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.hatch.sailingserver.SailingServerApplication" />
     <option name="ACTIVE_PROFILES" value="local" />
