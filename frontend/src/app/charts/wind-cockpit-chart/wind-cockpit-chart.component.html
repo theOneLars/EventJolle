@@ -1,0 +1,28 @@
+<svg [attr.width]="width" [attr.height]="height" xmlns="http://www.w3.org/2000/svg">
+  <g [attr.transform]="'translate(' + (width/2) + ',' + (height/2) + ')'">
+    <circle
+      [attr.r]="(width/2) * 0.925" stroke="white" stroke-width="2" fill="gray">
+    </circle>
+    <g class="marks"
+       [attr.transform]="'scale(' + (width/35) + ', ' + (width/35) + ')'">
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+      <line x1="15" y1="0" x2="16" y2="0" />
+    </g>
+    <circle r="13" fill="red"
+            [attr.transform]="'translate(' + (0.90 * (width/2) * sinOf(aperentWindAngle + 270))  + ',' +  0.90 * (width/2) * cosOf(aperentWindAngle + 270) + ')'"
+    ></circle>
+    <text class="sog"
+          [attr.transform]="'translate(' + (-1 * width * 0.15) + ',' + (width * 0.2) + ')'"
+    >SOG: </text>
+  </g>
+</svg>

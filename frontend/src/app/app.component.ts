@@ -11,20 +11,10 @@ import {Subscription} from "rxjs";
 export class AppComponent {
   title = 'jollen-cockpit';
 
-  private topicSubscription: Subscription;
-  private model: any;
-
-  constructor(private rxStompService: RxStompService) {
+  constructor() {
   }
 
   ngOnInit() {
-    let path = AppConstants.MODEL_BROKER_PATH + AppConstants.MODEL_BROKER_UPDATE_PATH;
-    this.topicSubscription = this.rxStompService.watch(path).subscribe((message: any) => {
-      if (message.body) {
-        this.model = JSON.parse(message.body);
-        console.log('received model: ', this.model)
-      }
-    });
   }
 
 }
