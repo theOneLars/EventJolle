@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SailingServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="SailingServer.backend.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.zuehlke.hatch.sailingserver.SailingServerApplication" />
+    <option name="ACTIVE_PROFILES" value="local" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
