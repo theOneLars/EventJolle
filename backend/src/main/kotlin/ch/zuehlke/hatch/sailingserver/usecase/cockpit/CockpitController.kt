@@ -13,10 +13,7 @@ import java.time.Duration
 class CockpitController {
 
 
-    private val cockpit: Flux<String>
-        @GetMapping(path = [""], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-        get() = Flux
-                .interval(Duration.ofMillis(2000))
-                .map { tick -> "cockpit data " + tick!! }
+    @GetMapping(path = [""], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getCockpit(): Flux<String> = Flux.interval(Duration.ofMillis(2000)).map { "cockpit data $it" }
 }
 
