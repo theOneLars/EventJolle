@@ -1,7 +1,7 @@
 package ch.zuehlke.hatch.sailingserver.signalk;
 
 import ch.zuehlke.hatch.sailingserver.frontend.WebSocketController;
-import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscibtionFactory;
+import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscriptionFactory;
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscription;
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscriptionPath;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class SignalKController {
         this.signalKService = signalKService;
         log.info("Server info from SignalK server: " + getFullServerInfo());
         startWebsocketConnection();
-        SignalKSubscription subscription = SignalKSubscibtionFactory.createDefaultSubscriptionWithSinglePath(
+        SignalKSubscription subscription = SignalKSubscriptionFactory.createDefaultSubscriptionWithSinglePath(
                 "*",
                 1000,
                 SignalKSubscriptionPath.FORMAT_DELTA,

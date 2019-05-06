@@ -1,8 +1,8 @@
 package ch.zuehlke.hatch.sailingserver.signalk.model.subscription;
 
-public class SignalKUnsubscribtion extends AbstractSubscribtion {
+public class SignalKUnsubscription extends AbstractSubscribtion {
 
-    public SignalKUnsubscribtion() {
+    public SignalKUnsubscription() {
     }
 
     @Override
