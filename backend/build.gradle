@@ -20,15 +20,18 @@ repositories {
 }
 
 dependencies {
-	compile 'org.springframework.boot:spring-boot-starter-webflux:2.0.3.RELEASE'
-	compile 'javax.websocket:javax.websocket-api:1.1'
-	compile 'org.mongodb:mongodb-driver-reactivestreams:1.11.0'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.0.3.RELEASE'
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+    implementation 'org.mongodb:mongodb-driver-reactivestreams:1.11.0'
 
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-	
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude module: 'junit'
+	}
+	testImplementation 'org.junit.jupiter:junit-jupiter-api'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 sourceCompatibility = 1.8
@@ -43,6 +46,10 @@ compileTestKotlin {
 		freeCompilerArgs = ["-Xjsr305=strict"]
 		jvmTarget = "1.8"
 	}
+}
+
+test {
+	useJUnitPlatform()
 }
 
 // This is required to be able to execute bootRun with parameters, e.g.:
