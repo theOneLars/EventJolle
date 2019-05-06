@@ -1,8 +1,12 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.4.RELEASE'
 	id 'java'
+	id 'org.jetbrains.kotlin.plugin.jpa' version '1.2.71'
+	id 'org.jetbrains.kotlin.jvm' version '1.2.71'
+	id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
 }
 
+apply plugin: 'kotlin-jpa'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
@@ -19,7 +23,24 @@ repositories {
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-webflux:2.0.3.RELEASE'
 	compile 'javax.websocket:javax.websocket-api:1.1'
+	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+	implementation 'org.jetbrains.kotlin:kotlin-reflect'
+	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+sourceCompatibility = 1.8
+compileKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "1.8"
+	}
+}
+compileTestKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "1.8"
+	}
 }
 
 // This is required to be able to execute bootRun with parameters, e.g.:
