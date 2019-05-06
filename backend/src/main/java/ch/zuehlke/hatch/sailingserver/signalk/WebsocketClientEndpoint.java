@@ -4,6 +4,7 @@ import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscrip
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscriptionPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
@@ -16,15 +17,13 @@ import java.net.URI;
 @Component
 public class WebsocketClientEndpoint {
 
-    private final String SIGNALK_HOST = "localhost";
-    private final String SIGNALK_PORT = "3000";
-
-    private static final Logger log = LoggerFactory.getLogger(WebsocketClientEndpoint.class);
+    @Value("${signalk.subscription.endpoint}")
+    private String signalkSubscriptionEndpoint;
 
     public void connect() {
         WebSocketClient client = new ReactorNettyWebSocketClient();
         client.execute(
-                URI.create("ws://" + SIGNALK_HOST + ":" + SIGNALK_PORT + "/signalk/v1/stream/?subscribe=none"),
+                URI.create(signalkSubscriptionEndpoint),
                 session ->
                         session
                                 .send(Mono.just(session.textMessage(getInitialSubscription())))

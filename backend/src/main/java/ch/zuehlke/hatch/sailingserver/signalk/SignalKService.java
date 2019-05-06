@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,22 +15,23 @@ import java.io.IOException;
 @Service
 public class SignalKService {
 
-    private final String SIGNALK_HOST = "localhost";
-    private final String SIGNALK_PORT = "3000";
-
     private static final Logger log = LoggerFactory.getLogger(SignalKService.class);
 
     private WebsocketClientEndpoint websocketClientEndpoint;
+    private String signalkRestEndpoint;
+
 
     @Autowired
-    public SignalKService(WebsocketClientEndpoint websocketClientEndpoint) {
+    public SignalKService(WebsocketClientEndpoint websocketClientEndpoint, @Value("${signalk.rest.endpoint}")
+        String signalkRestEndpoint) {
         this.websocketClientEndpoint = websocketClientEndpoint;
+        this.signalkRestEndpoint = signalkRestEndpoint;
     }
 
     public Object getFullServerInfo() {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.getForEntity(
-                "http://" + SIGNALK_HOST + ":" + SIGNALK_PORT + "/signalk/", String.class);
+        System.out.println(signalkRestEndpoint);
+        ResponseEntity<String> response = restTemplate.getForEntity(signalkRestEndpoint, String.class);
 
         try {
             ObjectMapper mapper = new ObjectMapper();
