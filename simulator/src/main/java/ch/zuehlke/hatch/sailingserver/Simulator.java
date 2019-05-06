@@ -82,7 +82,7 @@ public class Simulator {
                         timeNow = timeJson.getKey();
                         timeJson = extractTimeJson(line);
                         timeDiff = timeJson.getKey() - timeNow;
-
+                        timeDiff = timeDiff > 0 ? timeDiff : 0;
                         try {
                             Thread.sleep(timeDiff);
                         } catch (InterruptedException e) {
@@ -101,7 +101,6 @@ public class Simulator {
                 System.out.println("Something went wrong while reading file: " + e.getMessage());
             }
         }
-
     }
 
     /**
