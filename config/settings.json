@@ -7,41 +7,6 @@
   },
   "pipedProviders": [
     {
-      "id": "nmeaFromFile",
-      "pipeElements": [
-        {
-          "type": "providers/filestream",
-          "options": {
-            "filename": "samples/plaka.log",
-            "providerId": "nmeaFromFile"
-          },
-          "optionMappings": [
-            {
-              "fromAppProperty": "argv.nmeafilename",
-              "toOption": "filename"
-            }
-          ]
-        },
-        {
-          "type": "providers/throttle",
-          "options": {
-            "rate": 1000,
-            "providerId": "nmeaFromFile"
-          }
-        },
-        {
-          "type": "providers/liner"
-        },
-        {
-          "type": "providers/nmea0183-signalk",
-          "options": {
-            "sentenceEvent": "nmea0183-B",
-            "providerId": "nmeaFromFile"
-          }
-        }
-      ]
-    },
-    {
       "id": "SailingSimulator",
       "pipeElements": [
         {
