@@ -1,85 +1,48 @@
 package ch.zuehlke.hatch.sailingserver.signalk;
 
+import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscibtionFactory;
+import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalKSubscriptionPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.socket.WebSocketMessage;
+import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
+import org.springframework.web.reactive.socket.client.WebSocketClient;
+import reactor.core.publisher.Mono;
 
-import javax.websocket.*;
 import java.net.URI;
 
-@ClientEndpoint
+
+@Component
 public class WebsocketClientEndpoint {
+
+    private final String SIGNALK_HOST = "localhost";
+    private final String SIGNALK_PORT = "3000";
 
     private static final Logger log = LoggerFactory.getLogger(WebsocketClientEndpoint.class);
 
-    private Session userSession = null;
-    private MessageHandler messageHandler;
+    public void connect() {
+        WebSocketClient client = new ReactorNettyWebSocketClient();
+        client.execute(
+                URI.create("ws://" + SIGNALK_HOST + ":" + SIGNALK_PORT + "/signalk/v1/stream/?subscribe=none"),
+                session ->
+                        session
+                                .send(Mono.just(session.textMessage(getInitialSubscription())))
+                                .thenMany(session.receive()
+                                        .map(WebSocketMessage::getPayloadAsText)
+                                        .log())
+                                .then())
+                .subscribe();
 
-    public WebsocketClientEndpoint(URI endpointURI) {
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            container.connectToServer(this, endpointURI);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
-    /**
-     * Callback hook for Connection open events.
-     *
-     * @param userSession the userSession which is opened.
-     */
-    @OnOpen
-    public void onOpen(Session userSession) {
-        log.debug("opening subscription");
-        this.userSession = userSession;
+    private String getInitialSubscription() {
+        return SignalKSubscibtionFactory.createDefaultSubscriptionWithSinglePath(
+                    "*",
+                    1000,
+                    SignalKSubscriptionPath.FORMAT_DELTA,
+                    SignalKSubscriptionPath.POLICY_INSTANT,
+                    1000).toString();
     }
 
-    /**
-     * Callback hook for Connection close events.
-     *
-     * @param userSession the userSession which is getting closed.
-     * @param reason      the reason for connection close
-     */
-    @OnClose
-    public void onClose(Session userSession, CloseReason reason) {
-        log.debug("closing subscription");
-        this.userSession = null;
-    }
-
-    /**
-     * Callback hook for Message Events. This method will be invoked when a client send a message.
-     *
-     * @param message The text message
-     */
-    @OnMessage
-    public void onMessage(String message) {
-        if (this.messageHandler != null) {
-            this.messageHandler.handleMessage(message);
-        }
-    }
-
-    /**
-     * register message handler
-     *
-     * @param msgHandler
-     */
-    public void addMessageHandler(MessageHandler msgHandler) {
-        this.messageHandler = msgHandler;
-    }
-
-    /**
-     * Send a message.
-     *
-     * @param message
-     */
-    public void sendMessage(String message) {
-        this.userSession.getAsyncRemote().sendText(message);
-    }
-
-    /**
-     * Message handler.
-     */
-    public interface MessageHandler {
-        void handleMessage(String message);
-    }
 }
