@@ -2,4 +2,4 @@ package ch.zuehlke.hatch.sailingserver.domain
 
 import java.time.LocalDateTime
 
-data class ApparentWind(val speed: Double, val timestamp: LocalDateTime)
+data class TrueWindMeasurement(val timestamp: LocalDateTime, val wind: Wind)
