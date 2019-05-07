@@ -1,5 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.usecase.sample
 
+import ch.zuehlke.hatch.sailingserver.data.repository.LivePositionRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.PositionRepository
 import ch.zuehlke.hatch.sailingserver.domain.Position
 import ch.zuehlke.hatch.sailingserver.signalk.SignalKService
@@ -16,14 +17,13 @@ import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/sample")
-class SampleController {
+class SampleController(signalKService: SignalKService,
+                       private val positionRepository: PositionRepository,
+                       private val livePositionRepository: LivePositionRepository) {
 
-    private val repository: PositionRepository
-
-    constructor(signalKService: SignalKService, repository: PositionRepository) {
+    init {
         signalKService.getFullServerInfo()
         signalKService.startWebsocketConection()
-        this.repository = repository
     }
 
     private val sample: Mono<String>
@@ -43,8 +43,14 @@ class SampleController {
                      @RequestParam("to")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      to: LocalDateTime): Flux<Position> {
-        return this.repository.getPositions(from, to);
+        return this.positionRepository.getPositions(from, to);
     }
 
+    @GetMapping(path = ["/repoFlux/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getLivePositions(@RequestParam("from")
+                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                     from: LocalDateTime): Flux<Position> {
+        return this.livePositionRepository.getPositions(from);
+    }
 }
 

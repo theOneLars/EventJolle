@@ -1,6 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.data.receiver
 
-import ch.zuehlke.hatch.sailingserver.config.ApplicationConfig
+import ch.zuehlke.hatch.sailingserver.data.CollectionNames
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalkSubscription
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SubscriptionInfo
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -8,7 +8,6 @@ import com.mongodb.reactivestreams.client.MongoDatabase
 import com.mongodb.reactivestreams.client.Success
 import org.bson.Document
 import org.reactivestreams.Publisher
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient
@@ -17,7 +16,7 @@ import java.net.URI
 import javax.annotation.PostConstruct
 
 @Component
-class MessageReceiver {
+class MessageReceiver(private val database: MongoDatabase) {
 
     @Value("\${signalk.subscription.endpoint}")
     lateinit var signalkSubscriptionEndpoint: String
@@ -26,14 +25,8 @@ class MessageReceiver {
             "vessels.self",
             listOf(SubscriptionInfo("*", "1000", "delta", "instant", "1000")))
 
-    private val database: MongoDatabase
     private val objectMapper = ObjectMapper()
-
-
-    @Autowired
-    constructor(database: MongoDatabase) {
-        this.database = database
-    }
+    private val collectionNames = CollectionNames();
 
     @PostConstruct
     fun startReceiver() {
@@ -55,9 +48,22 @@ class MessageReceiver {
     }
 
     private fun store(document: Document): Publisher<Success> {
+        val path = this.getPath(document);
+        val collectionName = this.collectionNames.getByPath(path)
+
         return this.database
-                .getCollection(ApplicationConfig.COLLECTION_NAME_EVENTS)
+                .getCollection(collectionName)
                 .insertOne(document)
+    }
+
+    private fun getPath(document: Document): String {
+        val propertyAccessor = DocumentPropertyAccessor(document)
+
+        if (propertyAccessor.containsPath("updates[0].values[0].path")) {
+            return propertyAccessor.getString("updates[0].values[0].path")
+        } else {
+            return "";
+        }
     }
 
     private fun mapToDocument(content: String): Document {

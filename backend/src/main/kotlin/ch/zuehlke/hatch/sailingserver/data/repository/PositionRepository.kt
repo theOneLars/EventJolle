@@ -1,6 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.data.repository
 
-import ch.zuehlke.hatch.sailingserver.config.ApplicationConfig.Companion.COLLECTION_NAME_EVENTS
+import ch.zuehlke.hatch.sailingserver.data.CollectionNames.Companion.COLLECTION_NAME_EVENTS_NAVIGATION_POSITION
 import ch.zuehlke.hatch.sailingserver.data.receiver.DocumentPropertyAccessor
 import ch.zuehlke.hatch.sailingserver.domain.Position
 import com.mongodb.client.model.Filters.*
@@ -21,14 +21,13 @@ constructor(private val database: MongoDatabase) {
 
     fun getPositions(from: LocalDateTime, to: LocalDateTime): Flux<Position> {
         val filter = and(
-                eq("updates.values.path", "navigation.position"),
                 gte(PROPERTY_TIMESTAMP, from.format(DateTimeFormatter.ISO_DATE_TIME)),
                 lt(PROPERTY_TIMESTAMP, to.format(DateTimeFormatter.ISO_DATE_TIME))
         )
 
         return Flux.from(
                 this.database
-                        .getCollection(COLLECTION_NAME_EVENTS)
+                        .getCollection(COLLECTION_NAME_EVENTS_NAVIGATION_POSITION)
                         .find(filter)
                         .sort(Sorts.ascending(PROPERTY_TIMESTAMP))
         ).map { this.toPosition(it) }

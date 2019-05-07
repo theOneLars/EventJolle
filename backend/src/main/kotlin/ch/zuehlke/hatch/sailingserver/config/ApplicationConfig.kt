@@ -10,11 +10,7 @@ class ApplicationConfig {
 
     @Bean
     fun sailingEventStoreDatabase(): MongoDatabase {
-        val mongoClient = MongoClients.create("mongodb://localhost");
+        val mongoClient = MongoClients.create("mongodb://localhost:27017");
         return mongoClient.getDatabase("sailing-event-store");
-    }
-
-    companion object {
-        val COLLECTION_NAME_EVENTS = "events";
     }
 }
