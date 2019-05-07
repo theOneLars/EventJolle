@@ -31,10 +31,13 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude module: 'junit'
 	}
+	testImplementation "io.mockk:mockk:1.9.3"
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
 	testImplementation 'org.assertj:assertj-core:3.11.1'
+	testImplementation 'io.projectreactor:reactor-test'
 
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
 }
 
 sourceCompatibility = 1.8
