@@ -6,38 +6,66 @@ import java.time.format.DateTimeFormatter
 
 class DocumentPropertyAccessor(private val document: Document) {
 
+    private val pathParser = PathParser()
+
+    fun containsPath(path: String): Boolean {
+        var currentDocument = document
+
+        val parsedPath = this.pathParser.parse(path)
+        for (element in parsedPath.elements) {
+            if (parsedPath.isLast(element)) {
+                return currentDocument.containsKey(element.name)
+            } else if (element.isArray()) {
+                if (!currentDocument.containsKey(element.name)) {
+                    return false
+                } else {
+                    currentDocument = (currentDocument[element.name] as List<Document>)[element.index!!]
+                }
+            } else {
+                if (!currentDocument.containsKey(element.name)) {
+                    return false
+                } else {
+                    currentDocument = currentDocument[element.name] as Document
+                }
+            }
+        }
+
+        return false
+    }
+
     fun getDouble(path: String): Double {
-        val pathElements = path.split('.')
+        val parsedPath = this.pathParser.parse(path)
 
-        val currentDocument = get(pathElements)
+        val selectedDocument = getDocument(parsedPath)
 
-        return currentDocument.getDouble(pathElements.last());
+        return selectedDocument.getDouble(parsedPath.getLastElement().name)
     }
 
     fun getString(path: String): String {
-        val pathElements = path.split('.')
+        val parsedPath = this.pathParser.parse(path)
 
-        val currentDocument = get(pathElements)
+        val selectedDocument = getDocument(parsedPath)
 
-        return currentDocument.getString(pathElements.last())
+        return selectedDocument.getString(parsedPath.getLastElement().name)
     }
 
     fun getTimestamp(path: String): LocalDateTime {
         return LocalDateTime.parse(getString(path), DateTimeFormatter.ISO_DATE_TIME)
     }
 
-    private fun get(pathElements: List<String>): Document {
-        var currentDocument = document;
+    private fun getDocument(path: Path): Document {
+        var currentDocument = document
 
-        for (pathElement in pathElements.subList(0, pathElements.size - 1)) {
-            if (pathElement.endsWith("[0]")) {
-                val name = pathElement.substring(0, pathElement.indexOf('['))
-
-                currentDocument = (currentDocument[name] as List<Document>)[0]
+        for (element in path.elements.subList(0, path.elements.size - 1)) {
+            if (path.isLast(element)) {
+                return currentDocument
+            } else if (element.isArray()) {
+                currentDocument = (currentDocument[element.name] as List<Document>)[element.index!!]
             } else {
-                currentDocument = currentDocument[pathElement] as Document
+                currentDocument = currentDocument[element.name] as Document
             }
         }
+
         return currentDocument
     }
 }
