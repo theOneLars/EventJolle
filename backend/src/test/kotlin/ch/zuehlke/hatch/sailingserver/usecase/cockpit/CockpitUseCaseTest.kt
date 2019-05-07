@@ -12,13 +12,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import org.junit.jupiter.api.Test
-import reactor.core.publisher.Flux
-import java.time.LocalDateTime
 import reactor.test.StepVerifier
 import reactor.test.publisher.TestPublisher
-
-
-
+import java.time.LocalDateTime
 
 
 class CockpitUseCaseTest {
@@ -46,13 +42,15 @@ class CockpitUseCaseTest {
         val testee = CockpitUseCase(apparentWindRepository, magneticHeadingRepository, apparentWindSmoother)
 
         StepVerifier.create(testee.getCockpit())
-                .then { apparentWindPublisher.emit(ApparentWindMeasurement(Wind(7.1404906978132, Radiant(1.0)), LocalDateTime.of(2017, 1, 7, 12, 4, 0, 0))) }
-                .then { magneticHeadingPublisher.emit(MagneticHeadingMeasurement(Radiant(1.0), LocalDateTime.of(2017, 1, 7, 12, 4, 1, 0))) }
+                .then { apparentWindPublisher.next(ApparentWindMeasurement(Wind(7.1404906978132, Radiant(1.0)), LocalDateTime.of(2017, 1, 7, 12, 4, 0, 0))) }
+                .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(1.0), LocalDateTime.of(2017, 1, 7, 12, 4, 1, 0))) }
                 .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), Wind(7.1404906978132, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(1.0)))
-                //.then { apparentWindPublisher.emit(ApparentWindMeasurement(Wind(1.462874378, Radiant(1.0)), LocalDateTime.of(2017, 1, 7, 12, 4, 2, 0))) }
-                //.expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(1.462874378, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(1.0)))
-//                .then { magneticHeadingPublisher.emit(MagneticHeadingMeasurement(Radiant(2.5), LocalDateTime.of(2017, 1, 7, 12, 4, 3, 0))) }
-//                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(1.462874378, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(2.5)))
+                .then { apparentWindPublisher.next(ApparentWindMeasurement(Wind(1.462874378, Radiant(1.0)), LocalDateTime.of(2017, 1, 7, 12, 4, 2, 0))) }
+                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(1.462874378, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(1.0)))
+                .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(2.5), LocalDateTime.of(2017, 1, 7, 12, 4, 3, 0))) }
+                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(1.462874378, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(2.5)))
+                .then { magneticHeadingPublisher.complete() }
+                .then { apparentWindPublisher.complete() }
                 .verifyComplete()
     }
 }

@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.0.3.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'javax.websocket:javax.websocket-api:1.1'
     implementation 'org.mongodb:mongodb-driver-reactivestreams:1.11.0'
 
@@ -33,7 +33,6 @@ dependencies {
 	}
 	testImplementation "io.mockk:mockk:1.9.3"
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
-	testImplementation 'org.assertj:assertj-core:3.11.1'
 	testImplementation 'io.projectreactor:reactor-test'
 
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
