@@ -1,6 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.data.repository
 
-import ch.zuehlke.hatch.sailingserver.config.ApplicationConfig.Companion.COLLECTION_NAME_EVENTS
+import ch.zuehlke.hatch.sailingserver.data.CollectionNames.Companion.COLLECTION_NAME_EVENTS_NAVIGATION_POSITION
 import ch.zuehlke.hatch.sailingserver.data.receiver.DocumentPropertyAccessor
 import ch.zuehlke.hatch.sailingserver.domain.Position
 import com.mongodb.reactivestreams.client.MongoDatabase
@@ -14,7 +14,7 @@ class LivePositionRepository(private val positionRepository: PositionRepository,
                              private val database: MongoDatabase) {
 
     fun getPositions(from: LocalDateTime): Flux<Position> {
-        val liveStream = Flux.from(this.database.getCollection(COLLECTION_NAME_EVENTS).watch())
+        val liveStream = Flux.from(this.database.getCollection(COLLECTION_NAME_EVENTS_NAVIGATION_POSITION).watch())
                 .map { this.toPosition(it.fullDocument) }
 
         return this.positionRepository.getPositions(from, LocalDateTime.MAX)
