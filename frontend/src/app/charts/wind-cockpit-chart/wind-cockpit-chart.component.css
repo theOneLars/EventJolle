@@ -6,10 +6,6 @@ svg {
   stroke-linecap: round;
 }
 
-text.sog {
-  font-size: 32px;
-}
-
 .marks {
   stroke-width: 0.2;
   stroke: white

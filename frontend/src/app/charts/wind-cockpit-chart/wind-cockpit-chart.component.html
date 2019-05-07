@@ -1,8 +1,26 @@
 <svg [attr.width]="width" [attr.height]="height" xmlns="http://www.w3.org/2000/svg">
-  <g [attr.transform]="'translate(' + (width/2) + ',' + (height/2) + ')'">
+  <g [attr.transform]="'translate(' + (width/2) + ',' + (width/2) + ')'">
     <circle
       [attr.r]="(width/2) * 0.925" stroke="white" stroke-width="2" fill="gray">
     </circle>
+    <g transform="rotate(240)">
+      <path [attr.d]="'M 0,' + getArcRadius() +
+      ' A '
+      + getArcRadius() + ','
+      + getArcRadius() + ',0,0,0,'
+      + (getArcRadius() * cosOf(35)) + ','
+      + (getArcRadius() * sinOf(35))"
+            stroke="green" stroke-linecap="butt" stroke-width="22" fill="grey"/>
+    </g>
+    <g transform="rotate(155)">
+      <path [attr.d]="'M 0,' + getArcRadius() +
+      ' A '
+      + getArcRadius() + ','
+      + getArcRadius() + ',0,0,0,'
+      + (getArcRadius() * cosOf(35)) + ','
+      + (getArcRadius() * sinOf(35))"
+            stroke="red" stroke-linecap="butt" stroke-width="22" fill="grey"/>
+    </g>
     <g class="marks"
        [attr.transform]="'scale(' + (width/35) + ', ' + (width/35) + ')'">
       <line x1="15" y1="0" x2="16" y2="0" />
@@ -18,11 +36,31 @@
       <line x1="15" y1="0" x2="16" y2="0" />
       <line x1="15" y1="0" x2="16" y2="0" />
     </g>
-    <circle r="13" fill="red"
-            [attr.transform]="'translate(' + (0.90 * (width/2) * sinOf(aperentWindAngle + 270))  + ',' +  0.90 * (width/2) * cosOf(aperentWindAngle + 270) + ')'"
-    ></circle>
-    <text class="sog"
+
+    <g [attr.transform]="'translate(' + (0.90 * (width/2) * sinOf(apparentWindAngle + 270))  + ',' +  0.90 * (width/2) * cosOf(apparentWindAngle + 270) + ')'">
+      <path
+        fill="#173f5f"
+        stroke="black"
+        stroke-width="2"
+        stroke-linejoin="round"
+        fill-rule="nonzero"
+        id="svg_5"
+        [attr.transform]="'rotate(' + ((apparentWindAngle || 0) + 270)  +') scale(' + width / 500 + ')'"
+        d="M0,0 C-8.462897736150126,-0.00250323446977065 -15.704298489532448,5.668868960456337 -18.20069119386926,13.500004121681627 L-13.598907052133654,13.500004121681627 C-11.304460057097913,8.125980085309664 -6.049574898043376,4.360537062798414 0.10045968165695496,4.348933232221135 C8.355885698765064,4.3634380204383945 15.03584873550119,11.128471247330367 15.048738887164859,19.487580699857233 C15.03584873550119,27.84814063119478 8.355885698765064,34.613173858086725 0.10045968165695496,34.627678646304275 C-6.049574898043376,34.617525294546795 -11.305892296168395,30.84918131438667 -13.600339291204591,25.47370679920352 L-18.20069119386926,25.47370679920352 C-15.702866250452871,33.30484196042903 -8.462897736150126,38.9776646341752 0.10189192073675513,38.98056559182396 C10.727673603748144,38.9776646341752 19.346888345413618,30.254484997278382 19.348320584484444,19.48903117867701 C19.345456106334044,8.72212688125586 10.726241364677207,0.0003977231699536804 0.10045968165695496,-0.00250323446977065 zM-5.841900232450599,25.472256320374697 L4.398609139906057,19.487580699857233 L-5.841900232450599,13.49855364286185 L-5.841900232450599,16.830303497529314 L-21.560724059259428,16.830303497529314 L-21.560724059259428,22.140506465716385 L-5.841900232450599,22.140506465716385 L-5.841900232450599,25.472256320374697 z"
+        ></path>
+    </g>
+    <text [attr.font-size]="width / 15 + 'px'"
+          [attr.transform]="'translate(' + (-1 * width * 0.16) + ',' + (width * 0.1) + ')'"
+    >AWS: {{apparentWindSpeed | number:'1.0-1'}} kt</text>
+    <text [attr.font-size]="width / 15 + 'px'"
           [attr.transform]="'translate(' + (-1 * width * 0.15) + ',' + (width * 0.2) + ')'"
-    >SOG: </text>
+    >SOG: {{speedOverGround | number:'1.0-1'}} kt</text>
   </g>
+
+  <text [attr.font-size]="width / 15 + 'px'"
+        [attr.transform]="'translate(' + width / 80 + ',' + width / 15 + ')'"
+  >COG: {{courseOverGround | number:'3.0-0'}}°</text>
+  <text [attr.font-size]="width / 15 + 'px'"
+        [attr.transform]="'translate(' + 3 * width / 4 + ',' + width / 15 + ')'"
+  >M: {{magneticHeading | number:'3.0-0'}}°</text>
 </svg>
