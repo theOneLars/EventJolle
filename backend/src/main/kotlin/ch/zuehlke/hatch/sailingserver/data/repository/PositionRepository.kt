@@ -1,6 +1,7 @@
-package ch.zuehlke.hatch.sailingserver.data
+package ch.zuehlke.hatch.sailingserver.data.repository
 
 import ch.zuehlke.hatch.sailingserver.config.ApplicationConfig.Companion.COLLECTION_NAME_EVENTS
+import ch.zuehlke.hatch.sailingserver.data.DocumentPropertyAccessor
 import ch.zuehlke.hatch.sailingserver.domain.Position
 import com.mongodb.client.model.Filters.*
 import com.mongodb.client.model.Sorts

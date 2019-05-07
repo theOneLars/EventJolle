@@ -1,6 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.usecase.sample
 
-import ch.zuehlke.hatch.sailingserver.data.PositionRepository
+import ch.zuehlke.hatch.sailingserver.data.repository.PositionRepository
 import ch.zuehlke.hatch.sailingserver.domain.Position
 import ch.zuehlke.hatch.sailingserver.signalk.SignalKService
 import org.springframework.format.annotation.DateTimeFormat
