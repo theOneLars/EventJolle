@@ -1,6 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.usecase.cockpit
 
-import ch.zuehlke.hatch.sailingserver.processing.ApparentWind
+import ch.zuehlke.hatch.sailingserver.domain.ApparentWind
 import ch.zuehlke.hatch.sailingserver.processing.ApparentWindSmoother
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux

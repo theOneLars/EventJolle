@@ -1,5 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.processing
 
+import ch.zuehlke.hatch.sailingserver.domain.ApparentWind
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime

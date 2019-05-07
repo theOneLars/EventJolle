@@ -1,4 +1,4 @@
-package ch.zuehlke.hatch.sailingserver.processing
+package ch.zuehlke.hatch.sailingserver.domain
 
 import java.time.LocalDateTime
 

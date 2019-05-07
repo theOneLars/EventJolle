@@ -1,5 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.processing
 
+import ch.zuehlke.hatch.sailingserver.domain.ApparentWind
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 import java.time.temporal.ChronoUnit.SECONDS
