@@ -1,4 +1,4 @@
-package ch.zuehlke.hatch.sailingserver.data
+package ch.zuehlke.hatch.sailingserver.data.receiver
 
 import ch.zuehlke.hatch.sailingserver.config.ApplicationConfig
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalkSubscription

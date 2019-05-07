@@ -1,4 +1,4 @@
-package ch.zuehlke.hatch.sailingserver.data
+package ch.zuehlke.hatch.sailingserver.data.receiver
 
 import org.bson.Document
 import java.time.LocalDateTime
