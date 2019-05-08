@@ -12,16 +12,19 @@ class DocumentValueExtractor(private val values: List<Pair<LocalDateTime, Docume
 
     companion object {
         fun from(event: Document, path: String): DocumentValueExtractor {
-            val updates = event["updates"] as List<Document>
-            val values = updates.flatMap { update ->
-                val timestamp = update.getString("timestamp")
-                val datetime = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME)
-                val values = update["values"] as List<Document>
-                values
-                        .filter { it.getString("path") == path }
-                        .map { Pair(datetime, it["value"] as Document)}
+            if(event.containsKey("updates")) {
+                val updates = event["updates"] as List<Document>
+                val values = updates.flatMap { update ->
+                    val timestamp = update.getString("timestamp")
+                    val datetime = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME)
+                    val values = update["values"] as List<Document>
+                    values
+                            .filter { it.getString("path") == path }
+                            .map { Pair(datetime, it["value"] as Document) }
+                }
+                return DocumentValueExtractor(values)
             }
-            return DocumentValueExtractor(values)
+            return DocumentValueExtractor(emptyList())
         }
     }
 
