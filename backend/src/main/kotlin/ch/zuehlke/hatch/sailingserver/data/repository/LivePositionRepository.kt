@@ -25,8 +25,7 @@ class LivePositionRepository(
 
     fun getPositions(): Flux<Position> {
         return this.liveUpdateRepository.getLiveStream(PositionTransformer())
-                .log()
-
+                .log("live positions stream")
     }
 
     fun getPositions(from: LocalDateTime): Flux<Position> {
