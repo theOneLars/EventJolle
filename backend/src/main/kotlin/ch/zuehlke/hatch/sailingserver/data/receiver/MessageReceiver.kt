@@ -37,11 +37,9 @@ class MessageReceiver(private val database: MongoDatabase) {
             session
                     .send(Mono.just(session.textMessage(objectMapper.writeValueAsString(initialSubscription))))
                     .thenMany(session.receive()
-                            .map { it.getPayloadAsText() }
-                            .log()
+                            .map { it.payloadAsText }
                             .map { this.mapToDocument(it) }
                             .flatMap { this.store(it) }
-                            .log()
                     )
                     .then()
         }.subscribe()

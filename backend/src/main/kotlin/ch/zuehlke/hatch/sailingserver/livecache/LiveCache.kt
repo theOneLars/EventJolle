@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux
 import java.time.Duration
 
 class LiveCache<V, T : TemporalIdentifier<T>>(
-        private val updates: Flux<V>,
+        updates: Flux<V>,
         private val selector: (V) -> T
 ) {
     // singleton, guarantee the last 30 seconds are in the cache
@@ -22,7 +22,7 @@ class LiveCache<V, T : TemporalIdentifier<T>>(
         return snapshot.concatWith(updatePublisher).distinct(
                 { value -> this.selector(value) },
                 { ReadPointer<T>() },
-                { pointer, id -> pointer.read(id)},
+                { pointer, id -> pointer.read(id) },
                 { c -> c.reset() }
         )
     }
