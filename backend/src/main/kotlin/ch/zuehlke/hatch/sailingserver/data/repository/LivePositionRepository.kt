@@ -1,6 +1,5 @@
 package ch.zuehlke.hatch.sailingserver.data.repository
 
-import ch.zuehlke.hatch.sailingserver.data.eventstore.PositionTransformer
 import ch.zuehlke.hatch.sailingserver.domain.Position
 import ch.zuehlke.hatch.sailingserver.livecache.LiveCache
 import org.springframework.stereotype.Repository

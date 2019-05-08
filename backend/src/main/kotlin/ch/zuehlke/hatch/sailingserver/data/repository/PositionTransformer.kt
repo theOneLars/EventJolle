@@ -1,5 +1,7 @@
-package ch.zuehlke.hatch.sailingserver.data.eventstore
+package ch.zuehlke.hatch.sailingserver.data.repository
 
+import ch.zuehlke.hatch.sailingserver.data.eventstore.DocumentValueExtractor
+import ch.zuehlke.hatch.sailingserver.data.eventstore.EventTransformer
 import ch.zuehlke.hatch.sailingserver.domain.Position
 import org.bson.Document
 
