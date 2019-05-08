@@ -25,12 +25,14 @@ class LivePositionRepository(
 
     fun getPositions(): Flux<Position> {
         return this.liveUpdateRepository.getLiveStream(PositionTransformer())
+                .log()
+
     }
 
     fun getPositions(from: LocalDateTime): Flux<Position> {
         val snapshotStream = this.positionRepository.getPositions(from)
 
-        return this.liveCache.withSnapshot(snapshotStream.log("before live cache")).log("after live cache")
+        return this.liveCache.withSnapshot(snapshotStream)
     }
 
 }
