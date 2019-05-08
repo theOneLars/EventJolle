@@ -11,7 +11,6 @@ import java.io.IOException
 
 @Service
 class SignalKService(
-        val websocketClientEndpoint: WebsocketClientEndpoint,
         @param:Value("\${signalk.rest.endpoint}")
         val signalkRestEndpoint: String) {
 
@@ -34,10 +33,6 @@ class SignalKService(
         }
 
         throw IllegalStateException("Could not connect to signalK server")
-    }
-
-    fun startWebsocketConection() {
-        websocketClientEndpoint.connect()
     }
 
 }

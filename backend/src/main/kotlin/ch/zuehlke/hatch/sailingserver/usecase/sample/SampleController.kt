@@ -23,7 +23,6 @@ class SampleController(signalKService: SignalKService,
 
     init {
         signalKService.getFullServerInfo()
-        signalKService.startWebsocketConection()
     }
 
     private val sample: Mono<String>
