@@ -42,15 +42,23 @@ class CockpitUseCaseTest {
         val testee = CockpitUseCase(apparentWindRepository, magneticHeadingRepository, apparentWindSmoother)
 
         StepVerifier.create(testee.getCockpit())
-                .then { apparentWindPublisher.next(ApparentWindMeasurement(Wind(7.1404906978132, Radiant(1.0)), LocalDateTime.of(2017, 1, 7, 12, 4, 0, 0))) }
-                .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(1.0), LocalDateTime.of(2017, 1, 7, 12, 4, 1, 0))) }
+                .then { apparentWindPublisher.next(ApparentWindMeasurement(Wind(7.1404906978132, Radiant(1.0)), getTimestampWithDelay(0))) }
+                .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(1.0), getTimestampWithDelay(1))) }
                 .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), Wind(7.1404906978132, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(1.0)))
-                .then { apparentWindPublisher.next(ApparentWindMeasurement(Wind(1.462874378, Radiant(1.0)), LocalDateTime.of(2017, 1, 7, 12, 4, 2, 0))) }
+
+                .then { apparentWindPublisher.next(ApparentWindMeasurement(Wind(1.462874378, Radiant(1.0)), getTimestampWithDelay(2))) }
                 .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(1.462874378, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(1.0)))
-                .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(2.5), LocalDateTime.of(2017, 1, 7, 12, 4, 3, 0))) }
+
+                .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(2.5), getTimestampWithDelay(3))) }
                 .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(1.462874378, Radiant(1.0)), 1.0, Radiant(1.0), Radiant(2.5)))
+
                 .then { magneticHeadingPublisher.complete() }
                 .then { apparentWindPublisher.complete() }
                 .verifyComplete()
     }
+
+    private fun getTimestampWithDelay(secondsDelay: Int = 0, minutesDelay: Int = 4): LocalDateTime {
+        return LocalDateTime.of(2017, 1, 7, 12, minutesDelay, secondsDelay, 0)
+    }
+
 }
