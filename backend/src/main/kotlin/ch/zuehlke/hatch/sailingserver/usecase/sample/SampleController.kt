@@ -36,7 +36,7 @@ class SampleController(signalKService: SignalKService,
                 .interval(Duration.ofMillis(2000))
                 .map { tick -> "string " + tick!! }
 
-    @GetMapping(path = ["/repoFlux"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(path = ["/repoFlux/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getPositions(@RequestParam("from")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      from: LocalDateTime,
@@ -46,11 +46,16 @@ class SampleController(signalKService: SignalKService,
         return this.positionRepository.getPositions(from, to);
     }
 
-    @GetMapping(path = ["/repoFlux/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun getLivePositions(@RequestParam("from")
+    @GetMapping(path = ["/repoFlux/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getHistoryAndLivePositions(@RequestParam("from")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      from: LocalDateTime): Flux<Position> {
         return this.livePositionRepository.getPositions(from);
+    }
+
+    @GetMapping(path = ["/repoFlux/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getLivePositions(): Flux<Position> {
+        return this.livePositionRepository.getPositions();
     }
 }
 
