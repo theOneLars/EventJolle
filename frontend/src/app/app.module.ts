@@ -4,7 +4,6 @@ import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory} from '@s
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RxStompConfig} from "./config/rx-stomp.config";
 import {TopNavigationComponent} from './navigation/top-navigation/top-navigation.component';
 import {
   MatButtonModule,
@@ -21,6 +20,7 @@ import {LayoutModule} from "@angular/cdk/layout";
 import { WelcomeComponent } from './view/welcome/welcome.component';
 import { WindCockpitComponent } from './view/wind-cockpit/wind-cockpit.component';
 import { WindCockpitChartComponent } from './charts/wind-cockpit-chart/wind-cockpit-chart.component';
+import {WindCockpitService} from "./service/wind-cockpit.service";
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import { WindCockpitChartComponent } from './charts/wind-cockpit-chart/wind-cock
     NavigationComponent,
     WelcomeComponent,
     WindCockpitComponent,
-    WindCockpitChartComponent
+    WindCockpitChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,15 +48,7 @@ import { WindCockpitChartComponent } from './charts/wind-cockpit-chart/wind-cock
     LayoutModule,
   ],
   providers: [
-    {
-      provide: InjectableRxStompConfig,
-      useValue: RxStompConfig
-    },
-    {
-      provide: RxStompService,
-      useFactory: rxStompServiceFactory,
-      deps: [InjectableRxStompConfig]
-    }
+     WindCockpitService,
   ],
   bootstrap: [AppComponent]
 })

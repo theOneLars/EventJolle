@@ -9,30 +9,49 @@ export class WindCockpitChartComponent implements OnInit {
 
   private trueWindAngle = 0;
 
-  private speedOverGround = 0;
-  private courseOverGround = 0;
+  @Input()
   private magneticHeading = 0;
-  private aperentWindSpeed = 0;
+
+  @Input()
+  private apparentWindSpeed: number;
 
   @Input() // unit: degree
-  private aperentWindAngle = 180;
+  private courseOverGround: number;
+
+  @Input() // unit: degree
+  private apparentWindAngle: number;
+
+  @Input() // unit: kt
+  private speedOverGround: number;
 
   @Input()
-  private width;
+  private width: number;
 
   @Input()
-  private height;
+  private height: number;
 
-  constructor() { }
+  constructor() {
+  }
+
 
   ngOnInit() {
   }
 
+  private getArcRadius(): number {
+    return (this.width / 2) * 0.87;
+  }
+
   private sinOf(angle: number): number {
+    if (isNaN(angle)) {
+      return 0;
+    }
     return Math.cos(angle * Math.PI / 180);
   }
 
   private cosOf(angle: number): number {
+    if (isNaN(angle)) {
+      return 0;
+    }
     return Math.sin(angle * Math.PI / 180);
   }
 
