@@ -5,7 +5,6 @@ import ch.zuehlke.hatch.sailingserver.data.repository.SpeedOverGroundRepository
 import ch.zuehlke.hatch.sailingserver.domain.*
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
-import java.time.LocalDateTime
 import java.util.function.Function
 
 @Repository
@@ -21,13 +20,13 @@ class TrueWindRepository(val smoothedApparentWindRepository: SmoothedApparentWin
                     val speedOverGround = values[1] as SpeedOverGroundMeasurement
                     val courseOverGround = values[2] as CourseOverGroundMeasurement
 
-                    TrueWind.from(speedOverGround.speed, courseOverGround.course, apparentWind.wind)
+                    val newestTimestamp = listOf(apparentWind.timestamp, speedOverGround.timestamp, courseOverGround.timestamp).max()
+
+                    TrueWindMeasurement(newestTimestamp!!, TrueWind.from(speedOverGround.speed, courseOverGround.course, apparentWind.wind))
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 speedOverGroundRepository.getMockSpeedOverGround(),
                 courseOverGroundRepository.getMockCourseOverGround())
-                //TODO: calculate timestamp
-                .map { TrueWindMeasurement(LocalDateTime.now(), it) }
     }
 
 }

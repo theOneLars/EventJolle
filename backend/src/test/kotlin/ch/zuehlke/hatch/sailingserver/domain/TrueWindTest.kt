@@ -14,6 +14,7 @@ internal class TrueWindTest {
         assertThat(result.wind.radiant).isEqualTo(Radiant(1.1635016797303188))
         assertThat(result.wind.speed).isEqualTo(18.551650150210985)
     }
+
 }
 
 
