@@ -14,10 +14,22 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Repository
-class PositionRepository @Autowired
-constructor(private val database: MongoDatabase) {
+class PositionRepository constructor(
+        private val database: MongoDatabase
+) {
 
-    private val PROPERTY_TIMESTAMP = "updates.values.value.timestamp"
+    private val PROPERTY_TIMESTAMP = "updates.timestamp"
+
+    fun getPositions(from: LocalDateTime): Flux<Position> {
+        val filter = gte(PROPERTY_TIMESTAMP, from.format(DateTimeFormatter.ISO_DATE_TIME))
+
+        return Flux.from(
+                this.database
+                        .getCollection(COLLECTION_NAME_EVENTS_NAVIGATION_POSITION)
+                        .find(filter)
+                        .sort(Sorts.ascending(PROPERTY_TIMESTAMP))
+        ).map { this.toPosition(it) }
+    }
 
     fun getPositions(from: LocalDateTime, to: LocalDateTime): Flux<Position> {
         val filter = and(
@@ -36,7 +48,7 @@ constructor(private val database: MongoDatabase) {
     private fun toPosition(document: Document): Position? {
         val propertyAccessor = DocumentPropertyAccessor(document)
         return Position(
-                timestamp = propertyAccessor.getTimestamp("updates[0].values[0].value.timestamp"),
+                timestamp = propertyAccessor.getTimestamp("updates[0].timestamp"),
                 longitude = propertyAccessor.getDouble("updates[0].values[0].value.longitude"),
                 latitude = propertyAccessor.getDouble("updates[0].values[0].value.latitude"))
     }
