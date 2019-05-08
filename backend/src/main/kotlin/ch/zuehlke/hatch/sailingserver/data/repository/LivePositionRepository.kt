@@ -26,6 +26,11 @@ class LivePositionRepository(
         this.liveCache = LiveCache(liveStream) { position -> TimeBasedIdentifier(position.timestamp) }
     }
 
+    fun getPosition(): Flux<Position> {
+        return this.liveUpdateRepository.getLiveStream(COLLECTION_NAME_EVENTS_NAVIGATION_POSITION)
+                .map { this.toPosition(it) }
+    }
+
     fun getPositions(from: LocalDateTime): Flux<Position> {
         val snapshotStream = this.positionRepository.getPositions(from)
 
