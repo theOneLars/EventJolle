@@ -1,7 +1,9 @@
 package ch.zuehlke.hatch.sailingserver.usecase.sample
 
+import ch.zuehlke.hatch.sailingserver.data.repository.ApparentWindAngleRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.ApparentWindSpeedRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.PositionRepository
+import ch.zuehlke.hatch.sailingserver.domain.ApparentWindAngleMeasurement
 import ch.zuehlke.hatch.sailingserver.domain.ApparentWindSpeedMeasurement
 import ch.zuehlke.hatch.sailingserver.domain.PositionMeasurement
 import ch.zuehlke.hatch.sailingserver.signalk.SignalKService
@@ -19,6 +21,7 @@ import java.time.LocalDateTime
 @RestController
 @RequestMapping("/sample")
 class SampleController(signalKService: SignalKService,
+                       private val apparentWindAngleRepository: ApparentWindAngleRepository,
                        private val apparentWindSpeedRepository: ApparentWindSpeedRepository,
                        private val positionRepository: PositionRepository
 ) {
@@ -59,21 +62,42 @@ class SampleController(signalKService: SignalKService,
         return this.positionRepository.getPositions();
     }
 
-
-    @GetMapping(path = ["/apparentWindSpeed/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun getApparentWindSpeed(@RequestParam("from")
+    @GetMapping(path = ["/apparentWindAngle/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getApparentWindAngle(@RequestParam("from")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      from: LocalDateTime,
                      @RequestParam("to")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                     to: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
+                     to: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
+        return this.apparentWindAngleRepository.getHistoricApparentWindAngles(from, to);
+    }
+
+    @GetMapping(path = ["/apparentWindAngle/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getHistoryAndLiveApparentWindAngle(@RequestParam("from")
+                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                   from: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
+        return this.apparentWindAngleRepository.getApparentWindAngles(from);
+    }
+
+    @GetMapping(path = ["/apparentWindAngle/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getLiveApparentWindAngle(): Flux<ApparentWindAngleMeasurement> {
+        return this.apparentWindAngleRepository.getApparentWindAngles();
+    }
+
+    @GetMapping(path = ["/apparentWindSpeed/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun getApparentWindSpeed(@RequestParam("from")
+                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                             from: LocalDateTime,
+                             @RequestParam("to")
+                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                             to: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
         return this.apparentWindSpeedRepository.getHistoricApparentWindSpeeds(from, to);
     }
 
     @GetMapping(path = ["/apparentWindSpeed/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getHistoryAndLiveApparentWindSpeed(@RequestParam("from")
-                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                   from: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                           from: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
         return this.apparentWindSpeedRepository.getApparentWindSpeeds(from);
     }
 
