@@ -1,5 +1,5 @@
 export class AppConstants {
 
-  static URL_COCKPIT: string = 'http://localhost:8080/cockpit'
+  static URL_COCKPIT: string = '/api/cockpit'
 
 }

@@ -1,6 +1,7 @@
 package ch.zuehlke.hatch.sailingserver.livecache
 
 import reactor.core.publisher.Flux
+import reactor.core.publisher.FluxSink
 import reactor.core.publisher.ReplayProcessor
 import java.time.Duration
 
@@ -13,7 +14,12 @@ class LiveCache<V, T : TemporalIdentifier<T>>(
 
     init {
         // singleton
-        liveUpdateStream.subscribe { value -> this.replayProcessor.onNext(value) }
+        val sink = this.replayProcessor.sink(FluxSink.OverflowStrategy.BUFFER)
+        liveUpdateStream.log("live").subscribe(
+                { value -> sink.next(value) },
+                { error -> sink.error(error) },
+                { sink.complete() }
+        )
     }
 
     // per request
