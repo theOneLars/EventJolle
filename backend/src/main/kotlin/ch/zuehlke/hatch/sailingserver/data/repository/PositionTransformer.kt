@@ -9,10 +9,10 @@ class PositionTransformer : EventTransformer<PositionMeasurement> {
 
     override fun transform(document: Document): List<PositionMeasurement> {
         val extractor = DocumentValueExtractor.from(document, getPath())
-        return extractor.extract { timestamp, document ->
-            val valueDocument = document["value"] as Document
-            val longitude = valueDocument.getDouble("longitude")
-            val latitude = valueDocument.getDouble("latitude")
+        return extractor.extract { timestamp, valueDocument ->
+            val positionDocument = valueDocument["value"] as Document
+            val longitude = positionDocument.getDouble("longitude")
+            val latitude = positionDocument.getDouble("latitude")
             PositionMeasurement(timestamp, longitude, latitude)
         }
     }

@@ -13,8 +13,8 @@ class ApparentWindSpeedTransformer : EventTransformer<ApparentWindSpeedMeasureme
 
     override fun transform(document: Document): List<ApparentWindSpeedMeasurement> {
         val extractor = DocumentValueExtractor.from(document, getPath())
-        return extractor.extract { timestamp, document ->
-            val speed = document.getDouble("value")
+        return extractor.extract { timestamp, valueDocument ->
+            val speed = valueDocument.getDouble("value")
             ApparentWindSpeedMeasurement(speed, timestamp)
         }
     }

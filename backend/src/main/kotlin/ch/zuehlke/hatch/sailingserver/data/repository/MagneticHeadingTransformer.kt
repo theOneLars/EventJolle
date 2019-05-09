@@ -10,8 +10,8 @@ class MagneticHeadingTransformer : EventTransformer<MagneticHeadingMeasurement> 
 
     override fun transform(document: Document): List<MagneticHeadingMeasurement> {
         val extractor = DocumentValueExtractor.from(document, getPath())
-        return extractor.extract { time, document ->
-            val double = document.getDouble("value")
+        return extractor.extract { time, valueDocument ->
+            val double = valueDocument.getDouble("value")
             MagneticHeadingMeasurement(Radiant(double), time)
         }
     }

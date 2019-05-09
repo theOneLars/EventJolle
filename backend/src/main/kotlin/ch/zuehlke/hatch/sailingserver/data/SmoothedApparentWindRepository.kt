@@ -11,7 +11,7 @@ class SmoothedApparentWindRepository(private val apparentWindRepository: Apparen
 
     fun getSmoothApparentWindStream(): Flux<ApparentWindMeasurement> {
         val smoother = ApparentWindSmoother()
-        return apparentWindRepository.getMockApparentWindStream().map { smoother.smooth(it) }
+        return apparentWindRepository.getApparentWindStream().map { smoother.smooth(it) }
     }
 
 }
