@@ -15,7 +15,7 @@ class LiveCache<V, T : TemporalIdentifier<T>>(
     init {
         // singleton
         val sink = this.replayProcessor.sink(FluxSink.OverflowStrategy.BUFFER)
-        liveUpdateStream.log("live").subscribe(
+        liveUpdateStream.subscribe(
                 { value -> sink.next(value) },
                 { error -> sink.error(error) },
                 { sink.complete() }
