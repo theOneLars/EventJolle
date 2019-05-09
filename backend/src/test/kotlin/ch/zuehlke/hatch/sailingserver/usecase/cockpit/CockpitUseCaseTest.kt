@@ -2,16 +2,13 @@ package ch.zuehlke.hatch.sailingserver.usecase.cockpit
 
 import ch.zuehlke.hatch.sailingserver.data.SmoothedApparentWindRepository
 import ch.zuehlke.hatch.sailingserver.data.TrueWindRepository
-import ch.zuehlke.hatch.sailingserver.data.repository.ApparentWindRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.CourseOverGroundRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.MagneticHeadingRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.SpeedOverGroundRepository
 import ch.zuehlke.hatch.sailingserver.domain.*
-import ch.zuehlke.hatch.sailingserver.processing.ApparentWindSmoother
 import ch.zuehlke.hatch.sailingserver.usecase.cockpit.model.CockpitDto
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import org.junit.jupiter.api.Test
 import reactor.test.StepVerifier
 import reactor.test.publisher.TestPublisher
