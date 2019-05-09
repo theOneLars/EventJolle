@@ -14,8 +14,8 @@ class ApparentWindAngleTransformer : EventTransformer<ApparentWindAngleMeasureme
 
     override fun transform(document: Document): List<ApparentWindAngleMeasurement> {
         val extractor = DocumentValueExtractor.from(document, getPath())
-        return extractor.extract { timestamp, document ->
-            val radiant = Radiant(document.getDouble("value"))
+        return extractor.extract { timestamp, valueDocument ->
+            val radiant = Radiant(valueDocument.getDouble("value"))
             ApparentWindAngleMeasurement(radiant, timestamp)
         }
     }
