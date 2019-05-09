@@ -26,7 +26,7 @@ class TrueWindRepository(val smoothedApparentWindRepository: SmoothedApparentWin
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 speedOverGroundRepository.getMockSpeedOverGround(),
-                courseOverGroundRepository.getMockCourseOverGround())
+                courseOverGroundRepository.getCourseOverGround())
     }
 
 }

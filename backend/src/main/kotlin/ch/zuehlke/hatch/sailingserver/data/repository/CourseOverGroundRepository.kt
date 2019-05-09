@@ -1,26 +1,36 @@
 package ch.zuehlke.hatch.sailingserver.data.repository
 
+import ch.zuehlke.hatch.sailingserver.data.eventstore.EventStore
 import ch.zuehlke.hatch.sailingserver.domain.CourseOverGroundMeasurement
-import ch.zuehlke.hatch.sailingserver.domain.Radiant
+import ch.zuehlke.hatch.sailingserver.livecache.LiveCache
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
-import java.time.Duration
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 
 @Repository
-class CourseOverGroundRepository {
+class CourseOverGroundRepository(
+        private val eventStore: EventStore,
+        private val liveUpdateRepository: LiveUpdateRepository
+) {
 
-    fun getMockCourseOverGround(): Flux<CourseOverGroundMeasurement> {
-        val startTime = Instant.now().epochSecond
-        return Flux
-                .interval(Duration.ofMillis(1000))
-                .map { tick ->
-                    val randomRadiant = Radiant(Math.random() * 2 * 3.14)
-                    val timestamp = LocalDateTime.ofEpochSecond(startTime + tick.toInt(), 0, ZoneOffset.UTC)
+    private val liveCache: LiveCache<CourseOverGroundMeasurement, TimeBasedIdentifier>
 
-                    CourseOverGroundMeasurement(randomRadiant, timestamp)
-                }
+    init {
+        val liveStream = this.liveUpdateRepository.getLiveStream(CourseOverGroundTransformer())
+        this.liveCache = LiveCache(liveStream) { heading -> TimeBasedIdentifier(heading.timestamp) }
     }
+
+    fun getCourseOverGround(): Flux<CourseOverGroundMeasurement> {
+        return this.liveUpdateRepository.getLiveStream(CourseOverGroundTransformer())
+    }
+
+    fun getCourseOverGround(from: LocalDateTime): Flux<CourseOverGroundMeasurement> {
+        val find = this.eventStore.find(from, CourseOverGroundTransformer())
+        return this.liveCache.withSnapshot(find)
+    }
+
+    fun getHistoricCourseOverGround(from: LocalDateTime, to: LocalDateTime): Flux<CourseOverGroundMeasurement> {
+        return this.eventStore.find(from, to, CourseOverGroundTransformer())
+    }
+
 }

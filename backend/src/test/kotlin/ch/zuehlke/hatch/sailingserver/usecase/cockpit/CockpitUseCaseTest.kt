@@ -37,7 +37,7 @@ class CockpitUseCaseTest {
         every { magneticHeadingRepository.getMagneticHeading() } returns magneticHeadingPublisher.flux()
 
         val courseOverGroundPublisher = TestPublisher.create<CourseOverGroundMeasurement>()
-        every { courseOverGroundRepository.getMockCourseOverGround() } returns courseOverGroundPublisher.flux()
+        every { courseOverGroundRepository.getCourseOverGround() } returns courseOverGroundPublisher.flux()
 
         val speedOverGroundPublisher = TestPublisher.create<SpeedOverGroundMeasurement>()
         every { speedOverGroundRepository.getMockSpeedOverGround() } returns speedOverGroundPublisher.flux()

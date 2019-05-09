@@ -2,22 +2,22 @@ package ch.zuehlke.hatch.sailingserver.data.repository
 
 import ch.zuehlke.hatch.sailingserver.data.eventstore.DocumentValueExtractor
 import ch.zuehlke.hatch.sailingserver.data.eventstore.EventTransformer
-import ch.zuehlke.hatch.sailingserver.domain.MagneticHeadingMeasurement
+import ch.zuehlke.hatch.sailingserver.domain.CourseOverGroundMeasurement
 import ch.zuehlke.hatch.sailingserver.domain.Radiant
 import org.bson.Document
 
-class MagneticHeadingTransformer : EventTransformer<MagneticHeadingMeasurement> {
+class CourseOverGroundTransformer : EventTransformer<CourseOverGroundMeasurement>{
 
-    override fun transform(document: Document): List<MagneticHeadingMeasurement> {
+    override fun transform(document: Document): List<CourseOverGroundMeasurement> {
         val extractor = DocumentValueExtractor.from(document, getPath())
         return extractor.extract { time, document ->
             val double = document.getDouble("value")
-            MagneticHeadingMeasurement(Radiant(double), time)
+            CourseOverGroundMeasurement(Radiant(double), time)
         }
     }
 
     override fun getPath(): String {
-       return "navigation.courseOverGroundTrue"
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }
