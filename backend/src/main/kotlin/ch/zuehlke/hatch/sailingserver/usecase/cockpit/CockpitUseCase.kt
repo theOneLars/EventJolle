@@ -30,7 +30,7 @@ class CockpitUseCase(val smoothedApparentWindRepository: SmoothedApparentWindRep
                     CockpitDto(apparentWind.wind, trueWind.trueWind.wind, speedOverGround.speed, courseOverGround.course, magneticHeading.heading)
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
-                magneticHeadingRepository.getMockMagneticHeadingStream(),
+                magneticHeadingRepository.getMagneticHeading(),
                 speedOverGroundRepository.getMockSpeedOverGround(),
                 courseOverGroundRepository.getMockCourseOverGround(),
                 trueWindRepository.getTrueWindStream())
