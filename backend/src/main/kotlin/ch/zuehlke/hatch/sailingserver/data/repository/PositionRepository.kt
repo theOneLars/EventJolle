@@ -6,7 +6,6 @@ import ch.zuehlke.hatch.sailingserver.livecache.LiveCache
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 import java.time.LocalDateTime
-import javax.annotation.PostConstruct
 
 @Repository
 class PositionRepository(
@@ -14,10 +13,9 @@ class PositionRepository(
         private val liveUpdateRepository: LiveUpdateRepository
 ) {
 
-    private lateinit var liveCache: LiveCache<Position, TimeBasedIdentifier>
+    private val liveCache: LiveCache<Position, TimeBasedIdentifier>
 
-    @PostConstruct
-    fun initialize() {
+    init {
         val liveStream = this.liveUpdateRepository.getLiveStream(PositionTransformer())
                 .log("live stream")
         this.liveCache = LiveCache(liveStream) { position -> TimeBasedIdentifier(position.timestamp) }
@@ -34,7 +32,7 @@ class PositionRepository(
         return this.liveCache.withSnapshot(snapshotStream)
     }
 
-    fun getPositions(from: LocalDateTime, to: LocalDateTime): Flux<Position> {
+    fun getHistoricPositions(from: LocalDateTime, to: LocalDateTime): Flux<Position> {
         return this.eventStore.find(from, to, PositionTransformer())
     }
 }

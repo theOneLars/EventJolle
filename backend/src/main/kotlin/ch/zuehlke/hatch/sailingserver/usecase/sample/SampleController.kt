@@ -40,7 +40,7 @@ class SampleController(signalKService: SignalKService,
                      @RequestParam("to")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      to: LocalDateTime): Flux<Position> {
-        return this.positionRepository.getPositions(from, to);
+        return this.positionRepository.getHistoricPositions(from, to);
     }
 
     @GetMapping(path = ["/repoFlux/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
