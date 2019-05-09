@@ -10,8 +10,9 @@ class PositionTransformer : EventTransformer<Position> {
     override fun transform(document: Document): List<Position> {
         val extractor = DocumentValueExtractor.from(document, getPath())
         return extractor.extract { time, document ->
-            val longitude = document.getDouble("longitude")
-            val latitude = document.getDouble("latitude")
+            val valueDocument = document["value"] as Document
+            val longitude = valueDocument.getDouble("longitude")
+            val latitude = valueDocument.getDouble("latitude")
             Position(time, longitude, latitude)
         }
     }

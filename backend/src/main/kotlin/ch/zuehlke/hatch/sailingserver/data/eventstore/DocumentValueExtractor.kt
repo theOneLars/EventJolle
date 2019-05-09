@@ -20,7 +20,7 @@ class DocumentValueExtractor(private val values: List<Pair<LocalDateTime, Docume
                     val values = update["values"] as List<Document>
                     values
                             .filter { it.getString("path") == path }
-                            .map { Pair(datetime, it["value"] as Document) }
+                            .map { Pair(datetime, it) }
                 }
                 return DocumentValueExtractor(values)
             }
