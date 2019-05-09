@@ -47,16 +47,6 @@ class MessageReceiver(private val eventStore: EventStore) {
         return this.eventStore.insert(document)
     }
 
-    private fun getPath(document: Document): String {
-        val propertyAccessor = DocumentPropertyAccessor(document)
-
-        if (propertyAccessor.containsPath("updates[0].values[0].path")) {
-            return propertyAccessor.getString("updates[0].values[0].path")
-        } else {
-            return "";
-        }
-    }
-
     private fun mapToDocument(content: String): Document {
         val sanitizedContent = content.replace("\$source", "_source")
 
