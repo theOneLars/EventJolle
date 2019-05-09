@@ -7,7 +7,9 @@ import reactor.core.publisher.Flux
 import java.time.LocalDateTime
 
 @Repository
-class PositionRepository constructor(private val eventStore: EventStore) {
+class PositionRepository(
+        private val eventStore: EventStore
+) {
 
     fun getPositions(from: LocalDateTime): Flux<Position> {
         return this.eventStore.find(from, PositionTransformer())
