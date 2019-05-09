@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 
 class DocumentValueExtractor(private val values: List<Pair<LocalDateTime, Document>> ) {
 
-    fun <T> extract(extractor: (time: LocalDateTime, document: Document) -> T): List<T> {
+    fun <T> extract(extractor: (timestamp: LocalDateTime, document: Document) -> T): List<T> {
         return values.map { extractor(it.first, it.second) }
     }
 
