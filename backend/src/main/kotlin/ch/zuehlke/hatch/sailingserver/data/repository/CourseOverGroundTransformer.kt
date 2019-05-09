@@ -17,7 +17,7 @@ class CourseOverGroundTransformer : EventTransformer<CourseOverGroundMeasurement
     }
 
     override fun getPath(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return "navigation.courseOverGroundTrue"
     }
 
 }
