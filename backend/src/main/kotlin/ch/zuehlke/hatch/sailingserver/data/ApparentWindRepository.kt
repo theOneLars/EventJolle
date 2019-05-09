@@ -5,10 +5,6 @@ import ch.zuehlke.hatch.sailingserver.data.repository.ApparentWindSpeedRepositor
 import ch.zuehlke.hatch.sailingserver.domain.*
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.util.function.Function
 
 @Repository
@@ -17,21 +13,25 @@ class ApparentWindRepository(
         private val apparentWindSpeedRepository: ApparentWindSpeedRepository
 ) {
 
-    fun getApparentWindStream(): Flux<ApparentWindMeasurement> {
+    fun getApparentWindStream(): Flux<MeasurementMessage<ApparentWindMeasurement>> {
         return Flux.combineLatest(
                 Function { values: Array<Any> ->
-                    val apparentWindAngle = values[0] as ApparentWindAngleMeasurement
-                    val apparentWindSpeed = values[1] as ApparentWindSpeedMeasurement
+                    val apparentWindAngle = values[0] as MeasurementMessage<ApparentWindAngleMeasurement>
+                    val apparentWindSpeed = values[1] as MeasurementMessage<ApparentWindSpeedMeasurement>
 
-                    val newestTimestamp = listOf(apparentWindAngle.timestamp, apparentWindSpeed.timestamp).max()
+                    if (apparentWindAngle is MeasurementMessage.Data && apparentWindSpeed is MeasurementMessage.Data) {
+                        val newestTimestamp = listOf(apparentWindAngle.measurement.timestamp, apparentWindSpeed.measurement.timestamp).max()
 
-                    ApparentWindMeasurement(
-                            Wind(apparentWindSpeed.speed, apparentWindAngle.radiant),
-                            newestTimestamp!!
-                    )
+                        MeasurementMessage.Data(ApparentWindMeasurement(
+                                Wind(apparentWindSpeed.measurement.speed, apparentWindAngle.measurement.radiant),
+                                newestTimestamp!!
+                        ))
+                    } else {
+                        MeasurementMessage.Failure<ApparentWindMeasurement>("illegal source data for apparentWindStream")
+                    }
                 },
                 this.apparentWindAngleRepository.getApparentWindAngles(),
                 this.apparentWindSpeedRepository.getApparentWindSpeeds()
-        );
+        )
     }
 }

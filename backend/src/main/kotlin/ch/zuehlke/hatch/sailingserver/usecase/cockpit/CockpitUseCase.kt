@@ -22,12 +22,26 @@ class CockpitUseCase(val smoothedApparentWindRepository: SmoothedApparentWindRep
 
         return Flux.combineLatest(
                 Function { values: Array<Any> ->
-                    val apparentWind = values[0] as ApparentWindMeasurement
-                    val magneticHeading = values[1] as MagneticHeadingMeasurement
-                    val speedOverGround = values[2] as SpeedOverGroundMeasurement
-                    val courseOverGround = values[3] as CourseOverGroundMeasurement
-                    val trueWind = values[4] as TrueWindMeasurement
-                    CockpitDto(apparentWind.wind, trueWind.trueWind.wind, speedOverGround.speed, courseOverGround.course, magneticHeading.heading)
+                    //TODO: find solution for "runtime" safe generic casting
+                    val apparentWind = values[0] as MeasurementMessage<ApparentWindMeasurement>
+                    val magneticHeading = values[1] as MeasurementMessage<MagneticHeadingMeasurement>
+                    val speedOverGround = values[2] as MeasurementMessage<SpeedOverGroundMeasurement>
+                    val courseOverGround = values[3] as MeasurementMessage<CourseOverGroundMeasurement>
+                    val trueWind = values[4] as MeasurementMessage<TrueWindMeasurement>
+
+                    if (apparentWind is MeasurementMessage.Data &&
+                            magneticHeading is MeasurementMessage.Data &&
+                            speedOverGround is MeasurementMessage.Data &&
+                            courseOverGround is MeasurementMessage.Data &&
+                            trueWind is MeasurementMessage.Data) {
+                        CockpitDto(apparentWind.measurement.wind,
+                                trueWind.measurement.trueWind.wind,
+                                speedOverGround.measurement.speed,
+                                courseOverGround.measurement.course,
+                                magneticHeading.measurement.heading)
+                    } else {
+                        throw RuntimeException("data failure in get cockpit")
+                    }
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 magneticHeadingRepository.getMagneticHeading(),
