@@ -31,7 +31,7 @@ class CockpitUseCase(val smoothedApparentWindRepository: SmoothedApparentWindRep
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 magneticHeadingRepository.getMagneticHeading(),
-                speedOverGroundRepository.getMockSpeedOverGround(),
+                speedOverGroundRepository.getSpeedOverGround(),
                 courseOverGroundRepository.getCourseOverGround(),
                 trueWindRepository.getTrueWindStream())
     }

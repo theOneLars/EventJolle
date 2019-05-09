@@ -2,16 +2,10 @@ package ch.zuehlke.hatch.sailingserver.data.repository
 
 import ch.zuehlke.hatch.sailingserver.data.eventstore.EventStore
 import ch.zuehlke.hatch.sailingserver.domain.MagneticHeadingMeasurement
-import ch.zuehlke.hatch.sailingserver.domain.Position
-import ch.zuehlke.hatch.sailingserver.domain.Radiant
 import ch.zuehlke.hatch.sailingserver.livecache.LiveCache
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
-import java.time.Duration
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneOffset
-import javax.annotation.PostConstruct
 
 @Repository
 class MagneticHeadingRepository(

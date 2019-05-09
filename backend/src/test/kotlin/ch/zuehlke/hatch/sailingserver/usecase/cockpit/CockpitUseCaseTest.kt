@@ -40,7 +40,7 @@ class CockpitUseCaseTest {
         every { courseOverGroundRepository.getCourseOverGround() } returns courseOverGroundPublisher.flux()
 
         val speedOverGroundPublisher = TestPublisher.create<SpeedOverGroundMeasurement>()
-        every { speedOverGroundRepository.getMockSpeedOverGround() } returns speedOverGroundPublisher.flux()
+        every { speedOverGroundRepository.getSpeedOverGround() } returns speedOverGroundPublisher.flux()
         
         val trueWindPublisher = TestPublisher.create<TrueWindMeasurement>()
         every { trueWindRepository.getTrueWindStream() } returns trueWindPublisher.flux()

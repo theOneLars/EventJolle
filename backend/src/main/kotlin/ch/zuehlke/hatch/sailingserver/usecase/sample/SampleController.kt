@@ -3,7 +3,7 @@ package ch.zuehlke.hatch.sailingserver.usecase.sample
 import ch.zuehlke.hatch.sailingserver.data.repository.ApparentWindSpeedRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.PositionRepository
 import ch.zuehlke.hatch.sailingserver.domain.ApparentWindSpeedMeasurement
-import ch.zuehlke.hatch.sailingserver.domain.Position
+import ch.zuehlke.hatch.sailingserver.domain.PositionMeasurement
 import ch.zuehlke.hatch.sailingserver.signalk.SignalKService
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.MediaType
@@ -43,19 +43,19 @@ class SampleController(signalKService: SignalKService,
                      from: LocalDateTime,
                      @RequestParam("to")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                     to: LocalDateTime): Flux<Position> {
+                     to: LocalDateTime): Flux<PositionMeasurement> {
         return this.positionRepository.getHistoricPositions(from, to);
     }
 
     @GetMapping(path = ["/repoFlux/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getHistoryAndLivePositions(@RequestParam("from")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                     from: LocalDateTime): Flux<Position> {
+                     from: LocalDateTime): Flux<PositionMeasurement> {
         return this.positionRepository.getPositions(from);
     }
 
     @GetMapping(path = ["/repoFlux/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun getLivePositions(): Flux<Position> {
+    fun getLivePositions(): Flux<PositionMeasurement> {
         return this.positionRepository.getPositions();
     }
 
