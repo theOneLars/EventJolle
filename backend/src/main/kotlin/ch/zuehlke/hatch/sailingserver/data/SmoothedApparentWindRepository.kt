@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
 
 @Repository
-class SmoothedApparentWindRepository(private val apparentWindRepository: ApparentWindRepository,
-                                     private val apparentWindSmoother: ApparentWindSmoother) {
+class SmoothedApparentWindRepository(private val apparentWindRepository: ApparentWindRepository) {
 
     fun getSmoothApparentWindStream(): Flux<ApparentWindMeasurement> {
-        return apparentWindRepository.getMockApparentWindStream().map { apparentWindSmoother.smooth(it) }
+        val smoother = ApparentWindSmoother()
+        return apparentWindRepository.getMockApparentWindStream().map { smoother.smooth(it) }
     }
 
 }

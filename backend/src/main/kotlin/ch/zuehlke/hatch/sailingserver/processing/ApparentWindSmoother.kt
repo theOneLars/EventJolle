@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Service
 import java.time.temporal.ChronoUnit.SECONDS
 
-@Service
-@Scope("prototype")
 class ApparentWindSmoother {
 
     val smoothRangeSeconds = 2
