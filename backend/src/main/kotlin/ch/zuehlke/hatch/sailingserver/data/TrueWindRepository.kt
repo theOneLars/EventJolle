@@ -12,17 +12,21 @@ class TrueWindRepository(val smoothedApparentWindRepository: SmoothedApparentWin
                          val speedOverGroundRepository: SpeedOverGroundRepository,
                          val courseOverGroundRepository: CourseOverGroundRepository) {
 
-    fun getTrueWindStream(): Flux<TrueWindMeasurement> {
+    fun getTrueWindStream(): Flux<MeasurementMessage<TrueWindMeasurement>> {
 
         return Flux.combineLatest(
                 Function { values: Array<Any> ->
-                    val apparentWind = values[0] as ApparentWindMeasurement
-                    val speedOverGround = values[1] as SpeedOverGroundMeasurement
-                    val courseOverGround = values[2] as CourseOverGroundMeasurement
+                    //TODO: find solution for "runtime" safe generic casting
+                    val apparentWind = values[0] as MeasurementMessage<ApparentWindMeasurement>
+                    val speedOverGround = values[1] as MeasurementMessage<SpeedOverGroundMeasurement>
+                    val courseOverGround = values[2] as MeasurementMessage<CourseOverGroundMeasurement>
 
-                    val newestTimestamp = listOf(apparentWind.timestamp, speedOverGround.timestamp, courseOverGround.timestamp).max()
-
-                    TrueWindMeasurement(newestTimestamp!!, TrueWind.from(speedOverGround.speed, courseOverGround.course, apparentWind.wind))
+                    if (apparentWind is MeasurementMessage.Data && speedOverGround is MeasurementMessage.Data && courseOverGround is MeasurementMessage.Data) {
+                        val newestTimestamp = listOf(apparentWind.measurement.timestamp, speedOverGround.measurement.timestamp, courseOverGround.measurement.timestamp).max()
+                         MeasurementMessage.Data(TrueWindMeasurement(newestTimestamp!!, TrueWind.from(speedOverGround.measurement.speed, courseOverGround.measurement.course, apparentWind.measurement.wind)))
+                    } else {
+                         MeasurementMessage.Failure<TrueWindMeasurement>("could not calculate true wind")
+                    }
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 speedOverGroundRepository.getSpeedOverGround(),
