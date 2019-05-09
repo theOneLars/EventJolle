@@ -40,26 +40,26 @@ class SampleController(signalKService: SignalKService,
                 .interval(Duration.ofMillis(2000))
                 .map { tick -> "string " + tick!! }
 
-    @GetMapping(path = ["/repoFlux/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(path = ["/position/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getPositions(@RequestParam("from")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      from: LocalDateTime,
                      @RequestParam("to")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      to: LocalDateTime): Flux<PositionMeasurement> {
-        return this.positionRepository.getHistoricPositions(from, to);
+        return this.positionRepository.getHistoricPositions(from, to)
     }
 
-    @GetMapping(path = ["/repoFlux/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(path = ["/position/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getHistoryAndLivePositions(@RequestParam("from")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      from: LocalDateTime): Flux<PositionMeasurement> {
-        return this.positionRepository.getPositions(from);
+        return this.positionRepository.getPositions(from)
     }
 
-    @GetMapping(path = ["/repoFlux/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(path = ["/position/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getLivePositions(): Flux<PositionMeasurement> {
-        return this.positionRepository.getPositions();
+        return this.positionRepository.getPositions()
     }
 
     @GetMapping(path = ["/apparentWindAngle/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
@@ -69,19 +69,19 @@ class SampleController(signalKService: SignalKService,
                      @RequestParam("to")
                      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                      to: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
-        return this.apparentWindAngleRepository.getHistoricApparentWindAngles(from, to);
+        return this.apparentWindAngleRepository.getHistoricApparentWindAngles(from, to)
     }
 
     @GetMapping(path = ["/apparentWindAngle/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getHistoryAndLiveApparentWindAngle(@RequestParam("from")
                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                    from: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
-        return this.apparentWindAngleRepository.getApparentWindAngles(from);
+        return this.apparentWindAngleRepository.getApparentWindAngles(from)
     }
 
     @GetMapping(path = ["/apparentWindAngle/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getLiveApparentWindAngle(): Flux<ApparentWindAngleMeasurement> {
-        return this.apparentWindAngleRepository.getApparentWindAngles();
+        return this.apparentWindAngleRepository.getApparentWindAngles()
     }
 
     @GetMapping(path = ["/apparentWindSpeed/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
@@ -91,19 +91,19 @@ class SampleController(signalKService: SignalKService,
                              @RequestParam("to")
                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                              to: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
-        return this.apparentWindSpeedRepository.getHistoricApparentWindSpeeds(from, to);
+        return this.apparentWindSpeedRepository.getHistoricApparentWindSpeeds(from, to)
     }
 
     @GetMapping(path = ["/apparentWindSpeed/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getHistoryAndLiveApparentWindSpeed(@RequestParam("from")
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                            from: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
-        return this.apparentWindSpeedRepository.getApparentWindSpeeds(from);
+        return this.apparentWindSpeedRepository.getApparentWindSpeeds(from)
     }
 
     @GetMapping(path = ["/apparentWindSpeed/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getLiveApparentWindSpeed(): Flux<ApparentWindSpeedMeasurement> {
-        return this.apparentWindSpeedRepository.getApparentWindSpeeds();
+        return this.apparentWindSpeedRepository.getApparentWindSpeeds()
     }
 }
 

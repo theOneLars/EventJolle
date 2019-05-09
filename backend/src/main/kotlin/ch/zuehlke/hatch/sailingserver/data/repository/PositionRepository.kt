@@ -17,13 +17,11 @@ class PositionRepository(
 
     init {
         val liveStream = this.liveUpdateRepository.getLiveStream(PositionTransformer())
-                .log("live stream")
         this.liveCache = LiveCache(liveStream) { position -> TimeBasedIdentifier(position.timestamp) }
     }
 
     fun getPositions(): Flux<PositionMeasurement> {
         return this.liveUpdateRepository.getLiveStream(PositionTransformer())
-                .log("live positions stream")
     }
 
     fun getPositions(from: LocalDateTime): Flux<PositionMeasurement> {
