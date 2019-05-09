@@ -17,7 +17,7 @@ class MagneticHeadingTransformer : EventTransformer<MagneticHeadingMeasurement> 
     }
 
     override fun getPath(): String {
-       return "navigation.courseOverGroundTrue"
+       return "navigation.headingMagnetic"
     }
 
 }
