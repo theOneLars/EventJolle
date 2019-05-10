@@ -12,21 +12,29 @@ class TrueWindRepository(val smoothedApparentWindRepository: SmoothedApparentWin
                          val speedOverGroundRepository: SpeedOverGroundRepository,
                          val courseOverGroundRepository: CourseOverGroundRepository) {
 
+
     fun getTrueWindStream(): Flux<TrueWindMeasurement> {
+        val measurementTimeout = 5000
 
         return Flux.combineLatest(
                 Function { values: Array<Any> ->
-                    val apparentWind = values[0] as ApparentWindMeasurement
-                    val speedOverGround = values[1] as SpeedOverGroundMeasurement
-                    val courseOverGround = values[2] as CourseOverGroundMeasurement
-
-                    val newestTimestamp = listOf(apparentWind.timestamp, speedOverGround.timestamp, courseOverGround.timestamp).max()
-
-                    TrueWindMeasurement(newestTimestamp!!, TrueWind.from(speedOverGround.speed, courseOverGround.course, apparentWind.wind))
+                    TrueWindSourceMeasurements(values[0] as ApparentWindMeasurement,
+                            values[1] as SpeedOverGroundMeasurement,
+                            values[2] as CourseOverGroundMeasurement)
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 speedOverGroundRepository.getSpeedOverGround(),
                 courseOverGroundRepository.getCourseOverGround())
+                .filter { it.getBiggestDelta() > measurementTimeout }
+                .map {
+                    val trueWind = TrueWind.from(it.speedOverGroundMeasurement.speed, it.courseOverGroundMeasurement.course, it.apparentWindMeasurement.wind)
+                    TrueWindMeasurement(it.getNewest().timestamp, trueWind)
+                }
     }
 
+    private data class TrueWindSourceMeasurements(
+            val apparentWindMeasurement: ApparentWindMeasurement,
+            val speedOverGroundMeasurement: SpeedOverGroundMeasurement,
+            val courseOverGroundMeasurement: CourseOverGroundMeasurement) : Measurements(apparentWindMeasurement, speedOverGroundMeasurement, courseOverGroundMeasurement)
 }
+
