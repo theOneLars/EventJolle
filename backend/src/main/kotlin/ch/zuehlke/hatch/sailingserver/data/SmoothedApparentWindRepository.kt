@@ -12,8 +12,14 @@ class SmoothedApparentWindRepository(private val apparentWindRepository: Apparen
     fun getSmoothApparentWindStream(): Flux<MeasurementMessage<ApparentWindMeasurement>> {
         val smoother = ApparentWindSmoother()
         return apparentWindRepository.getApparentWindStream()
-                .map { mapOrPropagateError(it, smoother::smooth) }
+                .map { message ->
+                    when (message) {
+                        is MeasurementMessage.Data -> message.measurement
+                        else -> throw RuntimeException("error handling not yet implemented")
+                    }
+                }
+                .map { smoother.smooth(it) }
+                .map { MeasurementMessage.Data(it) }
     }
-
 
 }
