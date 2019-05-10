@@ -27,7 +27,7 @@ class LiveUpdateRepository {
 
     private val initialSubscription = SignalkSubscription(
             "vessels.self",
-            listOf(SubscriptionInfo("*", "1000", "delta", "instant", "1000")))
+            listOf(SubscriptionInfo("*", "1000", "delta", "instant", "10")))
     private val objectMapper = ObjectMapper()
 
     private val processor = DirectProcessor.create<Document>()

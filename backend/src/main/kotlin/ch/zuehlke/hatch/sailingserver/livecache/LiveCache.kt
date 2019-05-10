@@ -24,14 +24,11 @@ class LiveCache<V, T : TemporalIdentifier<T>>(
 
     // per request
     fun withSnapshot(snapshotStream: Flux<V>): Flux<V> {
-        return snapshotStream
-                .concatWith(replayProcessor)
-                .distinct(
-                        { value -> this.selector(value) },
-                        { ReadPointer<T>() },
-                        { pointer, id -> pointer.read(id) },
-                        { c -> c.reset() }
-
-                )
+        return snapshotStream.concatWith(replayProcessor).distinct(
+                { value -> this.selector(value) },
+                { ReadPointer<T>() },
+                { pointer, id -> pointer.read(id) },
+                { c -> c.reset() }
+        )
     }
 }
