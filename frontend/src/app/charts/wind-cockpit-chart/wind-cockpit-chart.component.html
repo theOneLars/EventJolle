@@ -21,22 +21,10 @@
     </g>
     <g id="angle-marks" class="marks"
        [attr.transform]="'scale(' + (width/35) + ', ' + (width/35) + ')'">
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
-      <line x1="15" y1="0" x2="16" y2="0" />
     </g>
 
     <g [attr.transform]="'translate(' + (0.90 * (width/2) * sinOf(apparentWindAngle + 270))  + ',' +  0.90 * (width/2) * cosOf(apparentWindAngle + 270) + ')'">
-      <path
+      <path *ngIf="apparentWindAngle"
         fill="#173f5f"
         stroke="black"
         stroke-width="2"

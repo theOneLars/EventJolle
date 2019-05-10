@@ -6,48 +6,48 @@ svg {
   stroke-linecap: round;
 }
 
-.marks {
-  stroke-width: 0.2;
-  stroke: white
-}
-.marks > line:nth-child(1) {
-  /* There are 12 marks, so we rotate by 30deg (12 * 30 = 360) */
-  transform: rotate(30deg);
-}
-.marks > line:nth-child(2) {
-  transform: rotate(calc(2 * 30deg));
-}
-.marks > line:nth-child(3) {
-  transform: rotate(calc(3 * 30deg));
-  stroke-width: 0.5;
-}
-.marks > line:nth-child(4) {
-  transform: rotate(calc(4 * 30deg));
-}
-.marks > line:nth-child(5) {
-  transform: rotate(calc(5 * 30deg));
-}
-.marks > line:nth-child(6) {
-  transform: rotate(calc(6 * 30deg));
-  stroke-width: 0.5;
-}
-.marks > line:nth-child(7) {
-  transform: rotate(calc(7 * 30deg));
-}
-.marks > line:nth-child(8) {
-  transform: rotate(calc(8 * 30deg));
-}
-.marks > line:nth-child(9) {
-  transform: rotate(calc(9 * 30deg));
-  stroke-width: 0.5;
-}
-.marks > line:nth-child(10) {
-  transform: rotate(calc(10 * 30deg));
-}
-.marks > line:nth-child(11) {
-  transform: rotate(calc(11 * 30deg));
-}
-.marks > line:nth-child(12) {
-  transform: rotate(calc(12 * 30deg));
-  stroke-width: 0.5;
-}
+/*.marks {*/
+  /*stroke-width: 0.2;*/
+  /*stroke: white*/
+/*}*/
+/*.marks > line:nth-child(1) {*/
+  /*!* There are 12 marks, so we rotate by 30deg (12 * 30 = 360) *!*/
+  /*transform: rotate(30deg);*/
+/*}*/
+/*.marks > line:nth-child(2) {*/
+  /*transform: rotate(calc(2 * 30deg));*/
+/*}*/
+/*.marks > line:nth-child(3) {*/
+  /*transform: rotate(calc(3 * 30deg));*/
+  /*stroke-width: 0.5;*/
+/*}*/
+/*.marks > line:nth-child(4) {*/
+  /*transform: rotate(calc(4 * 30deg));*/
+/*}*/
+/*.marks > line:nth-child(5) {*/
+  /*transform: rotate(calc(5 * 30deg));*/
+/*}*/
+/*.marks > line:nth-child(6) {*/
+  /*transform: rotate(calc(6 * 30deg));*/
+  /*stroke-width: 0.5;*/
+/*}*/
+/*.marks > line:nth-child(7) {*/
+  /*transform: rotate(calc(7 * 30deg));*/
+/*}*/
+/*.marks > line:nth-child(8) {*/
+  /*transform: rotate(calc(8 * 30deg));*/
+/*}*/
+/*.marks > line:nth-child(9) {*/
+  /*transform: rotate(calc(9 * 30deg));*/
+  /*stroke-width: 0.5;*/
+/*}*/
+/*.marks > line:nth-child(10) {*/
+  /*transform: rotate(calc(10 * 30deg));*/
+/*}*/
+/*.marks > line:nth-child(11) {*/
+  /*transform: rotate(calc(11 * 30deg));*/
+/*}*/
+/*.marks > line:nth-child(12) {*/
+  /*transform: rotate(calc(12 * 30deg));*/
+  /*stroke-width: 0.5;*/
+/*}*/

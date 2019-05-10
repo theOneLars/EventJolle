@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, LOCALE_ID, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import * as d3 from "d3";
 import {DecimalPipe} from "@angular/common";
 
@@ -7,7 +7,7 @@ import {DecimalPipe} from "@angular/common";
   templateUrl: './wind-cockpit-chart.component.html',
   styleUrls: ['./wind-cockpit-chart.component.css']
 })
-export class WindCockpitChartComponent implements OnInit, OnChanges {
+export class WindCockpitChartComponent implements OnInit {
 
   private _magneticHeading: number;
   private _apparentWindSpeed: number;
@@ -91,19 +91,45 @@ export class WindCockpitChartComponent implements OnInit, OnChanges {
     return Math.sin(angle * Math.PI / 180);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.drawWindCircle();
-  }
-
   private drawWindCircle() {
+    // add circle
     d3.select('#wind-circle-child').remove();
     d3.select('#wind-circle')
       .append('circle')
       .attr('id', 'wind-circle-child')
       .attr('r', (this.width / 2) * 0.925)
       .attr('stroke', 'white')
-      .attr('stroke-width', '2')
+      .attr('stroke-width', '3')
       .attr('fill', 'gray');
+
+    // add lines marks
+    let lines = Array(36).fill(1);
+    d3.select('#angle-marks')
+      .selectAll('line')
+      .remove();
+
+    d3.select('#angle-marks')
+      .selectAll('line')
+      .data(lines)
+      .enter()
+      .append('line')
+      .attr('x1', '15')
+      .attr('y1', '0')
+      .attr('x2', '16')
+      .attr('y2', '0');
+
+    // rotate line marks
+    d3.select('#angle-marks')
+      .selectAll('line')
+      .attr('transform', function(d,i){
+        return 'rotate(' + i * (360 / lines.length) + ')';
+      } )
+      .attr('stroke-width', function(d,i){
+        if ((i * 30) % 90 === 0) {
+          return '0.5'
+        }
+        return '0.2';
+      });
   }
 
   private drawSOG() {
