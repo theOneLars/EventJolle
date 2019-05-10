@@ -5,7 +5,6 @@ import ch.zuehlke.hatch.sailingserver.data.repository.ApparentWindSpeedRepositor
 import ch.zuehlke.hatch.sailingserver.data.repository.PositionRepository
 import ch.zuehlke.hatch.sailingserver.domain.ApparentWindAngleMeasurement
 import ch.zuehlke.hatch.sailingserver.domain.ApparentWindSpeedMeasurement
-import ch.zuehlke.hatch.sailingserver.domain.MeasurementMessage
 import ch.zuehlke.hatch.sailingserver.domain.PositionMeasurement
 import ch.zuehlke.hatch.sailingserver.signalk.SignalKService
 import org.springframework.format.annotation.DateTimeFormat
@@ -53,8 +52,8 @@ class SampleController(signalKService: SignalKService,
 
     @GetMapping(path = ["/position/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getHistoryAndLivePositions(@RequestParam("from")
-                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                   from: LocalDateTime): Flux<PositionMeasurement> {
+                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                     from: LocalDateTime): Flux<PositionMeasurement> {
         return this.positionRepository.getPositions(from)
     }
 
@@ -65,42 +64,24 @@ class SampleController(signalKService: SignalKService,
 
     @GetMapping(path = ["/apparentWindAngle/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getApparentWindAngle(@RequestParam("from")
-                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                             from: LocalDateTime,
-                             @RequestParam("to")
-                             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                             to: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
+                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                     from: LocalDateTime,
+                     @RequestParam("to")
+                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                     to: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
         return this.apparentWindAngleRepository.getHistoricApparentWindAngles(from, to)
-                .map { message ->
-                    when (message) {
-                        is MeasurementMessage.Data -> message.measurement
-                        else -> throw RuntimeException("error in data")
-                    }
-                }
     }
 
     @GetMapping(path = ["/apparentWindAngle/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getHistoryAndLiveApparentWindAngle(@RequestParam("from")
-                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                           from: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
+                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                   from: LocalDateTime): Flux<ApparentWindAngleMeasurement> {
         return this.apparentWindAngleRepository.getApparentWindAngles(from)
-                .map { message ->
-                    when (message) {
-                        is MeasurementMessage.Data -> message.measurement
-                        else -> throw RuntimeException("error in data")
-                    }
-                }
     }
 
     @GetMapping(path = ["/apparentWindAngle/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getLiveApparentWindAngle(): Flux<ApparentWindAngleMeasurement> {
         return this.apparentWindAngleRepository.getApparentWindAngles()
-                .map { message ->
-                    when (message) {
-                        is MeasurementMessage.Data -> message.measurement
-                        else -> throw RuntimeException("error in data")
-                    }
-                }
     }
 
     @GetMapping(path = ["/apparentWindSpeed/history"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
@@ -111,12 +92,6 @@ class SampleController(signalKService: SignalKService,
                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                              to: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
         return this.apparentWindSpeedRepository.getHistoricApparentWindSpeeds(from, to)
-                .map { message ->
-                    when (message) {
-                        is MeasurementMessage.Data -> message.measurement
-                        else -> throw RuntimeException("error in data")
-                    }
-                }
     }
 
     @GetMapping(path = ["/apparentWindSpeed/historyAndLive"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
@@ -124,23 +99,11 @@ class SampleController(signalKService: SignalKService,
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                                            from: LocalDateTime): Flux<ApparentWindSpeedMeasurement> {
         return this.apparentWindSpeedRepository.getApparentWindSpeeds(from)
-                .map { message ->
-                    when (message) {
-                        is MeasurementMessage.Data -> message.measurement
-                        else -> throw RuntimeException("error in data")
-                    }
-                }
     }
 
     @GetMapping(path = ["/apparentWindSpeed/live"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun getLiveApparentWindSpeed(): Flux<ApparentWindSpeedMeasurement> {
         return this.apparentWindSpeedRepository.getApparentWindSpeeds()
-                .map { message ->
-                    when (message) {
-                        is MeasurementMessage.Data -> message.measurement
-                        else -> throw RuntimeException("error in data")
-                    }
-                }
     }
 }
 
