@@ -13,11 +13,11 @@ export class WindCockpitComponent implements OnInit, OnDestroy {
 
   private cockpitDataStream: Subscription;
 
-  private apparentWindAngle: number;
-  private speedOverGround: number;
-  private courseOverGround: number;
-  private apparentWindSpeed: number;
-  private magneticHeading: number;
+  public apparentWindAngle: number;
+  public speedOverGround: number;
+  public courseOverGround: number;
+  public apparentWindSpeed: number;
+  public magneticHeading: number;
 
   constructor(private windCockpitService: WindCockpitService) {}
 

@@ -39,13 +39,13 @@ export class WindCockpitChartComponent implements OnInit {
   }
 
   @Input() // unit: degree
-  private apparentWindAngle: number;
+  public apparentWindAngle: number;
 
   @Input()
-  private width: number = 500;
+  public width: number = 500;
 
   @Input()
-  private height: number = 500;
+  public height: number = 500;
 
   private decimalPipe: DecimalPipe;
 
@@ -73,18 +73,18 @@ export class WindCockpitChartComponent implements OnInit {
     this.drawMagneticHeading();
   }
 
-  private getArcRadius(): number {
+  public getArcRadius(): number {
     return (this.width / 2) * 0.87;
   }
 
-  private sinOf(angle: number): number {
+  public sinOf(angle: number): number {
     if (isNaN(angle)) {
       return 0;
     }
     return Math.cos(angle * Math.PI / 180);
   }
 
-  private cosOf(angle: number): number {
+  public cosOf(angle: number): number {
     if (isNaN(angle)) {
       return 0;
     }
