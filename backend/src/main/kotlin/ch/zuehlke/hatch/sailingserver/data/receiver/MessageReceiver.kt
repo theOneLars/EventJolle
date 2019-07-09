@@ -1,10 +1,10 @@
 package ch.zuehlke.hatch.sailingserver.data.receiver
 
 import ch.zuehlke.hatch.sailingserver.data.eventstore.EventStore
+import ch.zuehlke.hatch.sailingserver.data.eventstore.Success
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalkSubscription
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SubscriptionInfo
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.mongodb.reactivestreams.client.Success
 import org.bson.Document
 import org.reactivestreams.Publisher
 import org.springframework.beans.factory.annotation.Value

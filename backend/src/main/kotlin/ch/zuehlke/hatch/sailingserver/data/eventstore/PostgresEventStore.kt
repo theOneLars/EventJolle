@@ -1,6 +1,5 @@
 package ch.zuehlke.hatch.sailingserver.data.eventstore
 
-import com.mongodb.reactivestreams.client.Success
 import org.bson.Document
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory

@@ -4,13 +4,13 @@ import ch.zuehlke.hatch.sailingserver.data.repository.LiveUpdateRepository
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Sorts
 import com.mongodb.reactivestreams.client.MongoDatabase
-import com.mongodb.reactivestreams.client.Success
 import org.bson.Document
 import org.bson.conversions.Bson
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
+import reactor.core.publisher.toFlux
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -41,7 +41,11 @@ class MongoDbEventStore(val database: MongoDatabase) : EventStore {
     }
 
     override fun insert(document: Document): Publisher<Success> {
-        return this.database.getCollection(collectionName).insertOne(document)
+        return this.database
+                .getCollection(collectionName)
+                .insertOne(document)
+                .toFlux()
+                .map { Success.SUCCESS }
     }
 
     private fun <T> query(filter: Bson, transformer: EventTransformer<T>): Flux<T> {

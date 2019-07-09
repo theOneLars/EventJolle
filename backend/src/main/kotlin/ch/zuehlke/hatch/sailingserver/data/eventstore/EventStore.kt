@@ -1,8 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.data.eventstore
 
-import com.mongodb.reactivestreams.client.Success
 import org.bson.Document
-import org.bson.conversions.Bson
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Flux
 import java.time.LocalDateTime
