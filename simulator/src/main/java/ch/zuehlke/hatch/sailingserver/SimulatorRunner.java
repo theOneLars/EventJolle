@@ -10,7 +10,7 @@ public class SimulatorRunner {
     private static final String CLI_PARAMETER_FILE = "f";
     private static final String CLI_PARAMETER_THROTTLE = "it";
 
-    private static final String DEFAULT_FILE = "/logs/eigeneLogs/2017-07-03/signalk-rawdata.log.2019-07-03T19";
+    private static final String DEFAULT_FILE = "/logs/eigeneLogs/2017-07-03/signalk-rawdata.log.2019-07-03T20";
 
     public static void main(String... args) {
         System.out.println("Starting Simulator....");
