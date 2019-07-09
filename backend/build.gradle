@@ -1,69 +1,79 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.1.5.RELEASE'
-	id 'org.jetbrains.kotlin.jvm' version '1.2.71'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
-	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.71'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id "org.flywaydb.flyway" version "5.2.4"
 }
 
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-	into('static') {
-		from('../frontend/dist/frontend/')
-	}
+    into('static') {
+        from('../frontend/dist/frontend/')
+    }
 }
 bootJar.dependsOn ":frontend:npm_run_dist"
 
 repositories {
-	mavenCentral()
-	maven {
-		url 'https://repo.spring.io/milestone'
-	}
+    mavenCentral()
+    maven {
+        url 'https://repo.spring.io/milestone'
+    }
 }
 
 ext['spring.framework.version'] = '5.2.0.M2'
 ext['spring.version'] = '5.2.0.M2'
+
+flyway {
+    url = 'jdbc:postgresql://127.0.0.1:5432/sailing-events'
+    user = 'postgres'
+    password = 'admin'
+    schemas = ['sailing-events']
+}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'javax.websocket:javax.websocket-api:1.1'
     implementation 'org.mongodb:mongodb-driver-reactivestreams:1.11.0'
 
-	implementation 'org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.M1'
-	implementation 'io.r2dbc:r2dbc-postgresql:1.0.0.M7'
+    implementation 'org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.M1'
+    implementation 'io.r2dbc:r2dbc-postgresql:1.0.0.M7'
 
-	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-	implementation 'org.jetbrains.kotlin:kotlin-reflect'
-	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation("org.flywaydb:flyway-core")
+    compile group: 'org.postgresql', name: 'postgresql', version: '9.4.1212'
 
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude module: 'junit'
-	}
-	testImplementation "io.mockk:mockk:1.9.3"
-	testImplementation 'org.junit.jupiter:junit-jupiter-api'
-	testImplementation 'io.projectreactor:reactor-test'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude module: 'junit'
+    }
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'io.projectreactor:reactor-test'
 
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
 }
 
 sourceCompatibility = 1.8
 compileKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict"]
-		jvmTarget = "1.8"
-	}
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
 }
 compileTestKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ["-Xjsr305=strict"]
-		jvmTarget = "1.8"
-	}
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 // This is required to be able to execute bootRun with parameters, e.g.:

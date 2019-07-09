@@ -17,3 +17,7 @@ repositories {
     mavenCentral()
 }
 
+task startPostgresqlDockerImage(type: Exec) {
+    workingDir 'postgresdocker'
+    commandLine './start.sh'
+}
