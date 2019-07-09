@@ -25,7 +25,7 @@ class TrueWindRepository(val smoothedApparentWindRepository: SmoothedApparentWin
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 speedOverGroundRepository.getSpeedOverGround(),
                 courseOverGroundRepository.getCourseOverGround())
-                .filter { it.getBiggestDelta() > measurementTimeout }
+                .filter { it.getBiggestDelta() < measurementTimeout }
                 .map {
                     val trueWind = TrueWind.from(it.speedOverGroundMeasurement.speed, it.courseOverGroundMeasurement.course, it.apparentWindMeasurement.wind)
                     TrueWindMeasurement(it.getNewest().timestamp, trueWind)

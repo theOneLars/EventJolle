@@ -11,6 +11,9 @@ class CourseOverGroundTransformer : EventTransformer<CourseOverGroundMeasurement
     override fun transform(document: Document): List<CourseOverGroundMeasurement> {
         val extractor = DocumentValueExtractor.from(document, getPath())
         return extractor.extract { time, valueDocument ->
+            // "value" may be Integer 0 in case the boat has not moved yet
+            // this leads to a ClassCastException
+            // TODO: handle this case more gracefully
             val double = valueDocument.getDouble("value")
             CourseOverGroundMeasurement(Radiant(double), time)
         }
