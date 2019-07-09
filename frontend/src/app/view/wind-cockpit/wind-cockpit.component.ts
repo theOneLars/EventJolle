@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {WindCockpitService} from "../../service/wind-cockpit.service";
-import {WindCockpitDto} from "../../model/wind-cockpit-dto";
 import {ConvertUtil} from "../../model/ConvertUtil";
 
 @Component({
@@ -18,6 +17,10 @@ export class WindCockpitComponent implements OnInit, OnDestroy {
   public courseOverGround: number;
   public apparentWindSpeed: number;
   public magneticHeading: number;
+  public trueWindSpeed: number;
+  public trueWindAngle: number;
+  public trueWindDirection: number;
+
 
   constructor(private windCockpitService: WindCockpitService) {}
 
@@ -27,8 +30,11 @@ export class WindCockpitComponent implements OnInit, OnDestroy {
         this.apparentWindAngle = ConvertUtil.radToDegree(message.apparentWind.radiant.value);
         this.speedOverGround = ConvertUtil.msTokt(message.speedOverGround);
         this.courseOverGround = ConvertUtil.radToDegree(message.courseOverGround.value);
-        this.apparentWindSpeed = ConvertUtil.msTokt(message.apparentWind.speed)
-        this.magneticHeading = ConvertUtil.radToDegree(message.magneticHeading.value)
+        this.apparentWindSpeed = ConvertUtil.msTokt(message.apparentWind.speed);
+        this.magneticHeading = ConvertUtil.radToDegree(message.magneticHeading.value);
+        this.trueWindSpeed = ConvertUtil.msTokt(message.trueWind.speed);
+        this.trueWindAngle = ConvertUtil.radToDegree(message.trueWind.angle.value);
+        this.trueWindDirection = ConvertUtil.radToDegree(message.trueWind.direction.value);
       });
   }
 

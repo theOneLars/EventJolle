@@ -38,7 +38,7 @@ class CockpitUseCaseTest {
 
         val speedOverGroundPublisher = TestPublisher.create<SpeedOverGroundMeasurement>()
         every { speedOverGroundRepository.getSpeedOverGround() } returns speedOverGroundPublisher.flux()
-        
+
         val trueWindPublisher = TestPublisher.create<TrueWindMeasurement>()
         every { trueWindRepository.getTrueWindStream() } returns trueWindPublisher.flux()
 
@@ -49,14 +49,14 @@ class CockpitUseCaseTest {
                 .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(1.0), getTimestampWithDelay(1))) }
                 .then { courseOverGroundPublisher.next(CourseOverGroundMeasurement(Radiant(2.3), getTimestampWithDelay(1))) }
                 .then { speedOverGroundPublisher.next(SpeedOverGroundMeasurement(4.35, getTimestampWithDelay(1))) }
-                .then { trueWindPublisher.next(TrueWindMeasurement(getTimestampWithDelay(1), TrueWind(Wind(9.56712376, Radiant(5.12))))) }
-                .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), Wind(9.56712376, Radiant(5.12)), 4.35, Radiant(2.3), Radiant(1.0)))
+                .then { trueWindPublisher.next(TrueWindMeasurement(getTimestampWithDelay(1), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)))) }
+                .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0)))
 
                 .then { smoothApparentWindPublisher.next(ApparentWindMeasurement(Wind(1.462874378, Radiant(1.0)), getTimestampWithDelay(2))) }
-                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(9.56712376, Radiant(5.12)), 4.35, Radiant(2.3), Radiant(1.0)))
+                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0)))
 
                 .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(2.5), getTimestampWithDelay(3))) }
-                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), Wind(9.56712376, Radiant(5.12)), 4.35, Radiant(2.3), Radiant(2.5)))
+                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(2.5)))
 
                 .then { magneticHeadingPublisher.complete() }
                 .then { smoothApparentWindPublisher.complete() }
@@ -69,5 +69,4 @@ class CockpitUseCaseTest {
     private fun getTimestampWithDelay(secondsDelay: Int = 0, minutesDelay: Int = 4): LocalDateTime {
         return LocalDateTime.of(2017, 1, 7, 12, minutesDelay, secondsDelay, 0)
     }
-
 }

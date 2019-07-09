@@ -2,13 +2,16 @@
   <mat-card-title>Wind Cockpit</mat-card-title>
   <mat-card-content #container>
     <wind-cockpit-chart
-     [height]="500"
-     [width]="container.offsetWidth"
-     [apparentWindAngle]="apparentWindAngle"
-     [speedOverGround]="speedOverGround"
-     [courseOverGround]="courseOverGround"
-     [apparentWindSpeed]="apparentWindSpeed"
-     [magneticHeading]="magneticHeading"
+      [height]="500"
+      [width]="container.offsetWidth"
+      [apparentWindAngle]="apparentWindAngle"
+      [speedOverGround]="speedOverGround"
+      [courseOverGround]="courseOverGround"
+      [apparentWindSpeed]="apparentWindSpeed"
+      [magneticHeading]="magneticHeading"
     ></wind-cockpit-chart>
   </mat-card-content>
+  <div>True Wind Speed: {{trueWindSpeed}}</div>
+  <div>True Wind Angle: {{trueWindAngle}}</div>
+  <div>True Wind Direction: {{trueWindDirection}}</div>
 </mat-card>

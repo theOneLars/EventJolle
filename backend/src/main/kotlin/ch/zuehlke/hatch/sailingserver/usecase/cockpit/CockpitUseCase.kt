@@ -27,7 +27,7 @@ class CockpitUseCase(val smoothedApparentWindRepository: SmoothedApparentWindRep
                     val speedOverGround = values[2] as SpeedOverGroundMeasurement
                     val courseOverGround = values[3] as CourseOverGroundMeasurement
                     val trueWind = values[4] as TrueWindMeasurement
-                    CockpitDto(apparentWind.wind, trueWind.trueWind.wind, speedOverGround.speed, courseOverGround.course, magneticHeading.heading)
+                    CockpitDto(apparentWind.wind, trueWind.trueWind, speedOverGround.speed, courseOverGround.course, magneticHeading.heading)
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 magneticHeadingRepository.getMagneticHeading(),
@@ -35,5 +35,4 @@ class CockpitUseCase(val smoothedApparentWindRepository: SmoothedApparentWindRep
                 courseOverGroundRepository.getCourseOverGround(),
                 trueWindRepository.getTrueWindStream())
     }
-
 }
