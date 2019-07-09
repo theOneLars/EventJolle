@@ -58,7 +58,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "jollen-cockpit:build"
+            "browserTarget": "jollen-cockpit:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
