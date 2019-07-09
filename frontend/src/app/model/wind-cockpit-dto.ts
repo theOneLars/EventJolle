@@ -4,7 +4,7 @@ export class WindCockpitDto {
   speedOverGround: number;
   courseOverGround: Radiant;
   magneticHeading: Radiant;
-
+  velocityMadeGood: number;
 }
 
 export class Wind {

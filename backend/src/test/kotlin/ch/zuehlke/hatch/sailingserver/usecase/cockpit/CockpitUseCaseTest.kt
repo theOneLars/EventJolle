@@ -53,10 +53,10 @@ class CockpitUseCaseTest {
                 .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0)))
 
                 .then { smoothApparentWindPublisher.next(ApparentWindMeasurement(Wind(1.462874378, Radiant(1.0)), getTimestampWithDelay(2))) }
-                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0)))
+                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0), 1.5))
 
                 .then { magneticHeadingPublisher.next(MagneticHeadingMeasurement(Radiant(2.5), getTimestampWithDelay(3))) }
-                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(2.5)))
+                .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(2.5), 1.5))
 
                 .then { magneticHeadingPublisher.complete() }
                 .then { smoothApparentWindPublisher.complete() }

@@ -20,6 +20,7 @@ export class WindCockpitComponent implements OnInit, OnDestroy {
   public trueWindSpeed: number;
   public trueWindAngle: number;
   public trueWindDirection: number;
+  public velocityMadeGood: number;
 
 
   constructor(private windCockpitService: WindCockpitService) {}
@@ -35,6 +36,7 @@ export class WindCockpitComponent implements OnInit, OnDestroy {
         this.trueWindSpeed = ConvertUtil.msTokt(message.trueWind.speed);
         this.trueWindAngle = ConvertUtil.radToDegree(message.trueWind.angle.value);
         this.trueWindDirection = ConvertUtil.radToDegree(message.trueWind.direction.value);
+        this.velocityMadeGood = ConvertUtil.msTokt(message.velocityMadeGood);
       });
   }
 
