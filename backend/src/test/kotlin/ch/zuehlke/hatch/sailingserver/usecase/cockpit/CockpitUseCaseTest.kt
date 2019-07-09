@@ -2,6 +2,7 @@ package ch.zuehlke.hatch.sailingserver.usecase.cockpit
 
 import ch.zuehlke.hatch.sailingserver.data.SmoothedApparentWindRepository
 import ch.zuehlke.hatch.sailingserver.data.TrueWindRepository
+import ch.zuehlke.hatch.sailingserver.data.VelocityMadeGoodRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.CourseOverGroundRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.MagneticHeadingRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.SpeedOverGroundRepository
@@ -25,8 +26,9 @@ class CockpitUseCaseTest {
         val courseOverGroundRepository = mockk<CourseOverGroundRepository>()
         val speedOverGroundRepository = mockk<SpeedOverGroundRepository>()
         val trueWindRepository = mockk<TrueWindRepository>()
-        
-        
+        val velocityMadeGoodRepository = mockk<VelocityMadeGoodRepository>()
+
+
         val smoothApparentWindPublisher = TestPublisher.create<ApparentWindMeasurement>()
         every { smoothApparentWindRepository.getSmoothApparentWindStream() } returns smoothApparentWindPublisher.flux()
 
@@ -42,7 +44,16 @@ class CockpitUseCaseTest {
         val trueWindPublisher = TestPublisher.create<TrueWindMeasurement>()
         every { trueWindRepository.getTrueWindStream() } returns trueWindPublisher.flux()
 
-        val testee = CockpitUseCase(smoothApparentWindRepository, magneticHeadingRepository, speedOverGroundRepository, courseOverGroundRepository, trueWindRepository)
+        val velocityMadeGoodPublisher = TestPublisher.create<VelocityMadeGoodMeasurement>()
+        every { velocityMadeGoodRepository.getVelocityMadeGoodStream() } returns velocityMadeGoodPublisher.flux()
+
+        val testee = CockpitUseCase(
+                smoothApparentWindRepository,
+                magneticHeadingRepository,
+                speedOverGroundRepository,
+                courseOverGroundRepository,
+                trueWindRepository,
+                velocityMadeGoodRepository)
 
         StepVerifier.create(testee.getCockpit())
                 .then { smoothApparentWindPublisher.next(ApparentWindMeasurement(Wind(7.1404906978132, Radiant(1.0)), getTimestampWithDelay(0))) }
@@ -50,7 +61,10 @@ class CockpitUseCaseTest {
                 .then { courseOverGroundPublisher.next(CourseOverGroundMeasurement(Radiant(2.3), getTimestampWithDelay(1))) }
                 .then { speedOverGroundPublisher.next(SpeedOverGroundMeasurement(4.35, getTimestampWithDelay(1))) }
                 .then { trueWindPublisher.next(TrueWindMeasurement(getTimestampWithDelay(1), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)))) }
-                .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0)))
+                .then { velocityMadeGoodPublisher.next(VelocityMadeGoodMeasurement(getTimestampWithDelay(1), 1.5)) }
+                .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0), 1.5))
+                .then { trueWindPublisher.next(TrueWindMeasurement(getTimestampWithDelay(1), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)))) }
+                .expectNext(CockpitDto(Wind(7.1404906978132, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0), 1.5))
 
                 .then { smoothApparentWindPublisher.next(ApparentWindMeasurement(Wind(1.462874378, Radiant(1.0)), getTimestampWithDelay(2))) }
                 .expectNext(CockpitDto(Wind(1.462874378, Radiant(1.0)), TrueWind(9.56712376, Radiant(5.12), Radiant(4.3)), 4.35, Radiant(2.3), Radiant(1.0), 1.5))
@@ -63,6 +77,7 @@ class CockpitUseCaseTest {
                 .then { courseOverGroundPublisher.complete() }
                 .then { speedOverGroundPublisher.complete() }
                 .then { trueWindPublisher.complete() }
+                .then { velocityMadeGoodPublisher.complete() }
                 .verifyComplete()
     }
 

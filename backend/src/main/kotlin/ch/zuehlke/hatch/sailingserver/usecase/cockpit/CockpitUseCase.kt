@@ -2,6 +2,7 @@ package ch.zuehlke.hatch.sailingserver.usecase.cockpit
 
 import ch.zuehlke.hatch.sailingserver.data.SmoothedApparentWindRepository
 import ch.zuehlke.hatch.sailingserver.data.TrueWindRepository
+import ch.zuehlke.hatch.sailingserver.data.VelocityMadeGoodRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.CourseOverGroundRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.MagneticHeadingRepository
 import ch.zuehlke.hatch.sailingserver.data.repository.SpeedOverGroundRepository
@@ -16,7 +17,8 @@ class CockpitUseCase(val smoothedApparentWindRepository: SmoothedApparentWindRep
                      val magneticHeadingRepository: MagneticHeadingRepository,
                      val speedOverGroundRepository: SpeedOverGroundRepository,
                      val courseOverGroundRepository: CourseOverGroundRepository,
-                     val trueWindRepository: TrueWindRepository) {
+                     val trueWindRepository: TrueWindRepository,
+                     val velocityMadeGoodRepository: VelocityMadeGoodRepository) {
 
     fun getCockpit(): Flux<CockpitDto> {
 
@@ -27,12 +29,14 @@ class CockpitUseCase(val smoothedApparentWindRepository: SmoothedApparentWindRep
                     val speedOverGround = values[2] as SpeedOverGroundMeasurement
                     val courseOverGround = values[3] as CourseOverGroundMeasurement
                     val trueWind = values[4] as TrueWindMeasurement
-                    CockpitDto(apparentWind.wind, trueWind.trueWind, speedOverGround.speed, courseOverGround.course, magneticHeading.heading)
+                    val velocityMadeGood = values[5] as VelocityMadeGoodMeasurement
+                    CockpitDto(apparentWind.wind, trueWind.trueWind, speedOverGround.speed, courseOverGround.course, magneticHeading.heading, velocityMadeGood.velocityMadeGood)
                 },
                 smoothedApparentWindRepository.getSmoothApparentWindStream(),
                 magneticHeadingRepository.getMagneticHeading(),
                 speedOverGroundRepository.getSpeedOverGround(),
                 courseOverGroundRepository.getCourseOverGround(),
-                trueWindRepository.getTrueWindStream())
+                trueWindRepository.getTrueWindStream(),
+                velocityMadeGoodRepository.getVelocityMadeGoodStream())
     }
 }

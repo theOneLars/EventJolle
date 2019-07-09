@@ -9,4 +9,5 @@ data class CockpitDto(
         val trueWind: TrueWind,
         val speedOverGround: Double,
         val courseOverGround: Radiant,
-        val magneticHeading: Radiant)
+        val magneticHeading: Radiant,
+        val velocityMadeGood: Double)
