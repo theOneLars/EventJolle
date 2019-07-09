@@ -1,9 +1,9 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.1.4.RELEASE'
+	id 'org.springframework.boot' version '2.1.5.RELEASE'
 	id 'org.jetbrains.kotlin.jvm' version '1.2.71'
 	id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
-	id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -17,12 +17,21 @@ bootJar.dependsOn ":frontend:npm_run_dist"
 
 repositories {
 	mavenCentral()
+	maven {
+		url 'https://repo.spring.io/milestone'
+	}
 }
+
+ext['spring.framework.version'] = '5.2.0.M2'
+ext['spring.version'] = '5.2.0.M2'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'javax.websocket:javax.websocket-api:1.1'
     implementation 'org.mongodb:mongodb-driver-reactivestreams:1.11.0'
+
+	implementation 'org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.M1'
+	implementation 'io.r2dbc:r2dbc-postgresql:1.0.0.M7'
 
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
