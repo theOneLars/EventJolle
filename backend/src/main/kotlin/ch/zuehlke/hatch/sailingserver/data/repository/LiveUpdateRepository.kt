@@ -4,8 +4,8 @@ import ch.zuehlke.hatch.sailingserver.data.eventstore.EventTransformer
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalkSubscription
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SubscriptionInfo
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.bson.Document
-import org.reactivestreams.Processor
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -14,7 +14,6 @@ import reactor.core.publisher.DirectProcessor
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.net.URI
-import java.util.function.BiConsumer
 import javax.annotation.PostConstruct
 
 @Component
@@ -30,7 +29,8 @@ class LiveUpdateRepository {
             listOf(SubscriptionInfo("*", "1000", "delta", "instant", "10")))
     private val objectMapper = ObjectMapper()
 
-    private val processor = DirectProcessor.create<Document>()
+    private val processor = DirectProcessor.create<JsonObject>()
+    private val parser = JsonParser()
 
     @PostConstruct
     fun initialize() {
@@ -41,7 +41,7 @@ class LiveUpdateRepository {
         ) { session ->
             val publish = session.receive()
                     .map { message -> message.payloadAsText }
-                    .map { this.mapToDocument(it) }
+                    .map { this.parseJsonObject(it) }
                     .publish()
             publish.subscribe { event ->
                 processor.onNext(event);
@@ -57,15 +57,15 @@ class LiveUpdateRepository {
 
     fun <T> getLiveStream(transformer: EventTransformer<T>): Flux<T> {
         return Flux.from(this.processor)
-                .flatMap { Flux.fromIterable(transformer.transform(it)) }
+                .flatMap { jsonPayload -> Flux.fromIterable(transformer.transform(jsonPayload)) }
                 .onErrorContinue {
                     throwable, value -> logger.error("Error while transforming $value with $transformer.", throwable)
                 }
     }
 
-    private fun mapToDocument(content: String): Document {
-        val sanitizedContent = content.replace("\$source", "_source")
+    private fun parseJsonObject(payload: String): JsonObject {
+        val sanitizedContent = payload.replace("\$source", "_source")
 
-        return Document.parse(sanitizedContent)
+        return this.parser.parse(sanitizedContent).asJsonObject
     }
 }

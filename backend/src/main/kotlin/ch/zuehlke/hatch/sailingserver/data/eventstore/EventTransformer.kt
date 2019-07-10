@@ -1,8 +1,9 @@
 package ch.zuehlke.hatch.sailingserver.data.eventstore
 
-import org.bson.Document
+import com.google.gson.JsonObject
 
 interface EventTransformer<T> {
     fun getPath(): String
-    fun transform(document: Document): List<T>
+
+    fun transform(json: JsonObject): List<T>
 }

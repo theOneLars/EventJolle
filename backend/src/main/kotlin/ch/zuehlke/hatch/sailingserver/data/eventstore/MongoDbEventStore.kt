@@ -1,6 +1,8 @@
 package ch.zuehlke.hatch.sailingserver.data.eventstore
 
 import ch.zuehlke.hatch.sailingserver.data.repository.LiveUpdateRepository
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Sorts
 import com.mongodb.reactivestreams.client.MongoDatabase
@@ -23,6 +25,8 @@ class MongoDbEventStore(val database: MongoDatabase) : EventStore {
     private val PROPERTY_TIMESTAMP = "updates.timestamp"
     private val PROPERTY_PATH = "updates.values.path"
 
+    private val parser = JsonParser()
+
     override fun <T> find(from: LocalDateTime, transformer: EventTransformer<T>) : Flux<T> {
         val filter = Filters.and(
                 Filters.gte(PROPERTY_TIMESTAMP, from.format(DateTimeFormatter.ISO_DATE_TIME)),
@@ -40,10 +44,12 @@ class MongoDbEventStore(val database: MongoDatabase) : EventStore {
        return query(filter, transformer)
     }
 
-    override fun insert(document: Document): Publisher<Success> {
+    override fun insert(document: JsonObject): Publisher<Success> {
+        val mongoDocument = Document.parse(document.toString())
+
         return this.database
                 .getCollection(collectionName)
-                .insertOne(document)
+                .insertOne(mongoDocument)
                 .toFlux()
                 .map { Success.SUCCESS }
     }
@@ -54,7 +60,8 @@ class MongoDbEventStore(val database: MongoDatabase) : EventStore {
                 .find(filter)
                 .sort(Sorts.ascending(PROPERTY_TIMESTAMP))
         return Flux.from(publisher)
-                .flatMap { document -> Flux.fromIterable(transformer.transform(document)) }
+                .map { document ->  this.parser.parse(document.toJson()).asJsonObject }
+                .flatMap { jsonDocument -> Flux.fromIterable(transformer.transform(jsonDocument)) }
                 .onErrorContinue { throwable, value -> logger.error("Error while transforming $value with $transformer.", throwable) }
     }
 }
