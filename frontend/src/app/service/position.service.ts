@@ -15,7 +15,7 @@ export class PositionService {
 
   observeMessages(): Observable<PositionDto> {
     return new Observable<PositionDto>(obs => {
-      const es = new EventSource(AppConstants.URL_POSITION);
+      const es = new EventSource(AppConstants.URL_TODAY_LIVE_POSITION);
       es.addEventListener('message', (evt) => {
         obs.next(JSON.parse(evt.data));
       });

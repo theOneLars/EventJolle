@@ -6,9 +6,8 @@
   <agm-polyline strokeColor="red" >
     <agm-polyline-point *ngFor="let position of positions"
                         [latitude]="position.latitude"
-                        [longitude]="position.longitude"
-
-    ></agm-polyline-point>
+                        [longitude]="position.longitude">
+    </agm-polyline-point>
   </agm-polyline>
 
 </agm-map>

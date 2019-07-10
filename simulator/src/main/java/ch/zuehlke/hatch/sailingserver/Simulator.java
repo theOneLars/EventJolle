@@ -70,8 +70,7 @@ public class Simulator {
 
                 long timeNow, timeDiff;
 
-
-                while (line != null) {
+                while (line != null && !line.isBlank()) {
                     System.out.println(timeJson.getValue());
                     sendMessage(timeJson.getValue());
                     line = reader.readLine();
