@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/position")
+@RequestMapping("/api/position")
 class PositionController(val positionUseCase: PositionUseCase) {
 
     @GetMapping(path = ["10years"])

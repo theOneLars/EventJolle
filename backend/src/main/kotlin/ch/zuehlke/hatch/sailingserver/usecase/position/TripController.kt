@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 
 @RestController
-@RequestMapping("/trip")
+@RequestMapping("/api/trip")
 class TripController(
         private val viewHistoricTrips: ViewHistoricTrips
 ) {

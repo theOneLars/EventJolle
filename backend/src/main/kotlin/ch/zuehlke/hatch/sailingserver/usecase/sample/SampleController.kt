@@ -19,7 +19,7 @@ import java.time.Duration
 import java.time.LocalDateTime
 
 @RestController
-@RequestMapping("/sample")
+@RequestMapping("/api/sample")
 class SampleController(signalKService: SignalKService,
                        private val apparentWindAngleRepository: ApparentWindAngleRepository,
                        private val apparentWindSpeedRepository: ApparentWindSpeedRepository,
