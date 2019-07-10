@@ -11,7 +11,7 @@ apply plugin: 'io.spring.dependency-management'
 
 bootJar {
     into('static') {
-        from('../frontend/dist/frontend/')
+        from('../frontend/dist/jollen-cockpit/')
     }
 }
 bootJar.dependsOn ":frontend:npm_run_dist"
