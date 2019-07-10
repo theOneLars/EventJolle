@@ -57,7 +57,7 @@ public class Simulator {
             files.add(file);
         }
 
-        Collections.sort(files, (file1, file2) -> file2.getName().compareTo(file1.getName()));
+        files.sort((file1, file2) -> file2.getName().compareTo(file1.getName()));
 
         BufferedReader reader;
 
@@ -66,20 +66,19 @@ public class Simulator {
             try {
                 reader = new BufferedReader(new FileReader(singleFile));
                 String line = reader.readLine();
+                Pair<Long, String> timeJson = extractTimeJson(line);
 
                 long timeNow, timeDiff;
 
-                Pair<Long, String> timeJson;
-                timeJson = extractTimeJson(line);
 
                 while (line != null) {
                     System.out.println(timeJson.getValue());
                     sendMessage(timeJson.getValue());
                     line = reader.readLine();
+                    timeJson = extractTimeJson(line);
 
                     if (inputThrottle == -1) {
                         timeNow = timeJson.getKey();
-                        timeJson = extractTimeJson(line);
                         timeDiff = timeJson.getKey() - timeNow;
                         timeDiff = timeDiff > 0 ? timeDiff : 0;
                         try {
@@ -111,17 +110,17 @@ public class Simulator {
      * @param line
      * @return
      */
-    private Pair extractTimeJson(String line) {
+    private Pair<Long, String> extractTimeJson(String line) {
         long time = 0;
         String json = "";
-        Pair<Long, String> timeJson = new Pair(time, json);
+        Pair<Long, String> timeJson = new Pair<>(time, json);
 
         Scanner sc = new Scanner(line).useDelimiter(";");
         if (sc.hasNextLong()) {
             time = sc.nextLong();
             sc.next();
             json = sc.next();
-            timeJson = new Pair(time, json);
+            timeJson = new Pair<>(time, json);
         } else {
             System.out.println("No timestamp found in line");
         }
