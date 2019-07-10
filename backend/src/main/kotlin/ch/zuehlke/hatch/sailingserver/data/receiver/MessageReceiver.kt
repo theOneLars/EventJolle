@@ -5,7 +5,8 @@ import ch.zuehlke.hatch.sailingserver.data.eventstore.Success
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SignalkSubscription
 import ch.zuehlke.hatch.sailingserver.signalk.model.subscription.SubscriptionInfo
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.bson.Document
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import org.reactivestreams.Publisher
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -25,6 +26,7 @@ class MessageReceiver(private val eventStore: EventStore) {
             listOf(SubscriptionInfo("*", "1000", "delta", "instant", "10")))
 
     private val objectMapper = ObjectMapper()
+    private val parser = JsonParser()
 
     @PostConstruct
     fun startReceiver() {
@@ -36,20 +38,20 @@ class MessageReceiver(private val eventStore: EventStore) {
                     .send(Mono.just(session.textMessage(objectMapper.writeValueAsString(initialSubscription))))
                     .thenMany(session.receive()
                             .map { it.payloadAsText }
-                            .map { this.mapToDocument(it) }
+                            .map { this.parseJsonObject(it) }
                             .flatMap { this.store(it) }
                     )
                     .then()
         }.subscribe()
     }
 
-    private fun store(document: Document): Publisher<Success> {
-        return this.eventStore.insert(document)
+    private fun store(payload: JsonObject): Publisher<Success> {
+        return this. eventStore.insert(payload)
     }
 
-    private fun mapToDocument(content: String): Document {
-        val sanitizedContent = content.replace("\$source", "_source")
+    private fun parseJsonObject(payload: String): JsonObject {
+        val sanitizedContent = payload.replace("\$source", "_source")
 
-        return Document.parse(sanitizedContent)
+        return this.parser.parse(sanitizedContent).asJsonObject
     }
 }

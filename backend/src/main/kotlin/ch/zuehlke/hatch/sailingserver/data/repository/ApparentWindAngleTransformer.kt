@@ -1,10 +1,10 @@
 package ch.zuehlke.hatch.sailingserver.data.repository
 
-import ch.zuehlke.hatch.sailingserver.data.eventstore.DocumentValueExtractor
 import ch.zuehlke.hatch.sailingserver.data.eventstore.EventTransformer
+import ch.zuehlke.hatch.sailingserver.data.eventstore.JsonValueExtractor
 import ch.zuehlke.hatch.sailingserver.domain.ApparentWindAngleMeasurement
 import ch.zuehlke.hatch.sailingserver.domain.Radiant
-import org.bson.Document
+import com.google.gson.JsonObject
 
 class ApparentWindAngleTransformer : EventTransformer<ApparentWindAngleMeasurement> {
 
@@ -12,10 +12,11 @@ class ApparentWindAngleTransformer : EventTransformer<ApparentWindAngleMeasureme
         return "environment.wind.angleApparent"
     }
 
-    override fun transform(document: Document): List<ApparentWindAngleMeasurement> {
-        val extractor = DocumentValueExtractor.from(document, getPath())
-        return extractor.extract { timestamp, valueDocument ->
-            val radiant = Radiant(valueDocument.getDouble("value"))
+    override fun transform(json: JsonObject): List<ApparentWindAngleMeasurement> {
+        val extractor = JsonValueExtractor.from(json, getPath())
+        return extractor.extract { timestamp, valueJson ->
+            val value = valueJson.getAsJsonPrimitive("value")
+            val radiant = Radiant(value.asDouble)
             ApparentWindAngleMeasurement(radiant, timestamp)
         }
     }

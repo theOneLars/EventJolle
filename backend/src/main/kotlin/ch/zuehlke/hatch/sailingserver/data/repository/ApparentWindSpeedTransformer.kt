@@ -1,9 +1,9 @@
 package ch.zuehlke.hatch.sailingserver.data.repository
 
-import ch.zuehlke.hatch.sailingserver.data.eventstore.DocumentValueExtractor
 import ch.zuehlke.hatch.sailingserver.data.eventstore.EventTransformer
+import ch.zuehlke.hatch.sailingserver.data.eventstore.JsonValueExtractor
 import ch.zuehlke.hatch.sailingserver.domain.ApparentWindSpeedMeasurement
-import org.bson.Document
+import com.google.gson.JsonObject
 
 class ApparentWindSpeedTransformer : EventTransformer<ApparentWindSpeedMeasurement> {
 
@@ -11,10 +11,11 @@ class ApparentWindSpeedTransformer : EventTransformer<ApparentWindSpeedMeasureme
         return "environment.wind.speedApparent"
     }
 
-    override fun transform(document: Document): List<ApparentWindSpeedMeasurement> {
-        val extractor = DocumentValueExtractor.from(document, getPath())
-        return extractor.extract { timestamp, valueDocument ->
-            val speed = valueDocument.getDouble("value")
+    override fun transform(json: JsonObject): List<ApparentWindSpeedMeasurement> {
+        val extractor = JsonValueExtractor.from(json, getPath())
+        return extractor.extract { timestamp, valueJson ->
+            val value = valueJson.getAsJsonPrimitive("value")
+            val speed = value.asDouble
             ApparentWindSpeedMeasurement(speed, timestamp)
         }
     }

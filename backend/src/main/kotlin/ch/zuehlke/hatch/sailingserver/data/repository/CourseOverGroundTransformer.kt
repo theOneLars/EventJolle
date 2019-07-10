@@ -1,26 +1,23 @@
 package ch.zuehlke.hatch.sailingserver.data.repository
 
-import ch.zuehlke.hatch.sailingserver.data.eventstore.DocumentValueExtractor
 import ch.zuehlke.hatch.sailingserver.data.eventstore.EventTransformer
+import ch.zuehlke.hatch.sailingserver.data.eventstore.JsonValueExtractor
 import ch.zuehlke.hatch.sailingserver.domain.CourseOverGroundMeasurement
 import ch.zuehlke.hatch.sailingserver.domain.Radiant
-import org.bson.Document
+import com.google.gson.JsonObject
 
 class CourseOverGroundTransformer : EventTransformer<CourseOverGroundMeasurement>{
-
-    override fun transform(document: Document): List<CourseOverGroundMeasurement> {
-        val extractor = DocumentValueExtractor.from(document, getPath())
-        return extractor.extract { time, valueDocument ->
-            // "value" may be Integer 0 in case the boat has not moved yet
-            // this leads to a ClassCastException
-            // TODO: handle this case more gracefully
-            val double = valueDocument.getDouble("value")
-            CourseOverGroundMeasurement(Radiant(double), time)
-        }
-    }
 
     override fun getPath(): String {
         return "navigation.courseOverGroundTrue"
     }
 
+    override fun transform(json: JsonObject): List<CourseOverGroundMeasurement> {
+        val extractor = JsonValueExtractor.from(json, getPath())
+        return extractor.extract { timestamp, valueJson ->
+            val value = valueJson.getAsJsonPrimitive("value")
+            val course = Radiant(value.asDouble)
+            CourseOverGroundMeasurement(course, timestamp)
+        }
+    }
 }
