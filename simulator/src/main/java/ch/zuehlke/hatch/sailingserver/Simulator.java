@@ -73,7 +73,7 @@ public class Simulator {
                 timeJson = extractTimeJson(line);
 
                 while (line != null) {
-//                    System.out.println(timeJson.getValue());
+                    System.out.println(timeJson.getValue());
                     sendMessage(timeJson.getValue());
                     line = reader.readLine();
 
