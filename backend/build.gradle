@@ -20,7 +20,6 @@ repositories {
     }
 }
 
-ext['spring.framework.version'] = '5.2.0.M2'
 ext['spring.version'] = '5.2.0.M2'
 
 dependencies {
