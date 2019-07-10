@@ -22,6 +22,9 @@ import {WelcomeComponent} from './view/welcome/welcome.component';
 import {WindCockpitComponent} from './view/wind-cockpit/wind-cockpit.component';
 import {WindCockpitChartComponent} from './charts/wind-cockpit-chart/wind-cockpit-chart.component';
 import {WindCockpitService} from "./service/wind-cockpit.service";
+import { GoogleMapsChartComponent } from './charts/google-maps-chart/google-maps-chart.component';
+import {AgmCoreModule} from "@agm/core";
+import {MapViewComponent} from "./view/map-view/map-view.component";
 
 @NgModule({
   declarations: [
@@ -32,6 +35,8 @@ import {WindCockpitService} from "./service/wind-cockpit.service";
     WelcomeComponent,
     WindCockpitComponent,
     WindCockpitChartComponent,
+    GoogleMapsChartComponent,
+    MapViewComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +52,9 @@ import {WindCockpitService} from "./service/wind-cockpit.service";
     MatSnackBarModule,
     MatCardModule,
     LayoutModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'tbd'
+    })
   ],
   providers: [
      WindCockpitService,
