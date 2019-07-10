@@ -11,19 +11,23 @@ class JsonValueExtractor(private val values: List<Pair<LocalDateTime, JsonObject
     }
 
     companion object {
-        fun from(document: JsonObject, path: String): JsonValueExtractor {
-            if(document.has("updates")) {
-                val updates = document.getAsJsonArray("updates")
+        fun from(jsonObject: JsonObject, path: String): JsonValueExtractor {
+            if(jsonObject.has("updates")) {
+                val updates = jsonObject.getAsJsonArray("updates")
 
                 val values = updates.flatMap { update ->
                     val updateObject = update.asJsonObject
 
-                    val timestamp = updateObject["timestamp"].asString
-                    val datetime = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME)
+                    if (updateObject.has("timestamp")) {
+                        val timestamp = updateObject["timestamp"].asString
+                        val datetime = LocalDateTime.parse(timestamp, DateTimeFormatter.ISO_DATE_TIME)
 
-                    updateObject.getAsJsonArray("values")
-                            .filter { it.asJsonObject.get("path").asString == path }
-                            .map { Pair(datetime, it.asJsonObject) }
+                        updateObject.getAsJsonArray("values")
+                                .filter { it.asJsonObject.get("path").asString == path }
+                                .map { Pair(datetime, it.asJsonObject) }
+                    } else {
+                        emptyList()
+                    }
                 }
                 return JsonValueExtractor(values)
             }

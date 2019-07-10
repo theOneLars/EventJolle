@@ -14,6 +14,16 @@ internal class CourseOverGroundTransformerTest {
     private var transformer: EventTransformer<CourseOverGroundMeasurement> = CourseOverGroundTransformer()
 
     @Test
+    fun testTransformWithEmptyJson() {
+        val jsonObject = givenEmptyJson()
+
+        val actual = this.transformer.transform(jsonObject)
+
+        assertThat(actual)
+                .isEmpty()
+    }
+
+    @Test
     fun testTransformWithValidCourseOverGround() {
         val jsonObject = givenJsonWithValidCourseOverGround()
 
@@ -38,6 +48,10 @@ internal class CourseOverGroundTransformerTest {
     private fun givenJsonObject(json: String): JsonObject {
         val parser = JsonParser()
         return parser.parse(json).asJsonObject
+    }
+
+    private fun givenEmptyJson(): JsonObject {
+        return givenJsonObject("{\"updates\":[{\"values\":[{}]}]}")
     }
 
     private fun givenJsonWithValidCourseOverGround(): JsonObject {
