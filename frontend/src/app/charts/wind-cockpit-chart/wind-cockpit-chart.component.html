@@ -36,7 +36,7 @@
         ></path>
     </g>
     <g [attr.transform]="'translate(' + (0.90 * (width/2) * sinOf(trueWindAngle + 270))  + ',' +  0.90 * (width/2) * cosOf(trueWindAngle + 270) + ')'">
-      <path *ngIf="apparentWindAngle"
+      <path *ngIf="trueWindAngle"
         fill="#173f5f"
         stroke="blue"
         stroke-width="2"
