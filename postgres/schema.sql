@@ -1,7 +1,13 @@
-﻿-- Table: public.measurement
+﻿-- DROP TABLES AND SEQUENCES
+DROP TABLE public.measurement;
+DROP SEQUENCE measurement_id_seq;
 
--- DROP TABLE public.measurement;
+-- CREATE SEQUENCES
+CREATE SEQUENCE measurement_id_seq;
 
+ALTER SEQUENCE measurement_id_seq OWNER to postgres;
+
+-- CREATE TABLES
 CREATE TABLE public.measurement
 (
   id integer NOT NULL DEFAULT nextval('measurement_id_seq'::regclass),
