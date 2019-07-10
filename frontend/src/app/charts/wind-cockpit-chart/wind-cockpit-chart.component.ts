@@ -203,7 +203,4 @@ export class WindCockpitChartComponent implements OnInit {
     return this.width / 15 + 'px';
   }
 
-  private drawTWA(): string {
-
-  }
 }
