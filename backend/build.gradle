@@ -4,10 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.71'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
-    id "org.flywaydb.flyway" version "5.2.4"
 }
-
-apply plugin: 'io.spring.dependency-management'
 
 bootJar {
     into('static') {
@@ -25,12 +22,6 @@ repositories {
 
 ext['spring.framework.version'] = '5.2.0.M2'
 ext['spring.version'] = '5.2.0.M2'
-
-flyway {
-    url = 'jdbc:postgresql://127.0.0.1:5432/sailing-events'
-    user = 'postgres'
-    password = 'admin'
-}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
