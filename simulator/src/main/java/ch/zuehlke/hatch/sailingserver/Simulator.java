@@ -1,5 +1,6 @@
 package ch.zuehlke.hatch.sailingserver;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
 
 import java.io.BufferedReader;
@@ -70,7 +71,7 @@ public class Simulator {
 
                 long timeNow, timeDiff;
 
-                while (line != null && !line.isBlank()) {
+                while (StringUtils.isNotBlank(line)) {
                     System.out.println(timeJson.getValue());
                     sendMessage(timeJson.getValue());
                     line = reader.readLine();
