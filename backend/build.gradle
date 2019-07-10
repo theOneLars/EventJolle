@@ -30,7 +30,6 @@ flyway {
     url = 'jdbc:postgresql://127.0.0.1:5432/sailing-events'
     user = 'postgres'
     password = 'admin'
-    schemas = ['sailing-events']
 }
 
 dependencies {
