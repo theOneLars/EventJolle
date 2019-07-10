@@ -9,13 +9,13 @@ import {PositionDto} from "../../model/position-dto";
 export class GoogleMapsChartComponent implements OnInit {
 
   @Input()
-  private longitude: number;
+  public longitude: number;
 
   @Input()
-  private latitude: number;
+  public latitude: number;
 
   @Input()
-  private positions: Array<PositionDto>;
+  public positions: Array<PositionDto>;
 
   zoom: number = 15;
 

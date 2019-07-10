@@ -38,6 +38,9 @@ yarn-error.log
 testem.log
 /typings
 
+# frontend properties
+src/environments/env-vars.json
+
 # System Files
 .DS_Store
 Thumbs.db

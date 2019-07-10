@@ -12,10 +12,10 @@ export class MapViewComponent implements OnInit, OnDestroy {
 
   private positionDataStream: Subscription;
 
-  private longitude: number;
-  private latitude: number;
+  public longitude: number;
+  public latitude: number;
 
-  private positions: Array<PositionDto> = new Array();
+  public positions: Array<PositionDto> = new Array();
 
   constructor(private positionService: PositionService) {}
 

@@ -1,6 +1,6 @@
 export class AppConstants {
 
-  static URL_COCKPIT: string = '/api/cockpit'
-  static URL_POSITION: string = '/api/position/10years'
+  public static URL_COCKPIT: string = '/api/cockpit';
+  public static URL_POSITION: string = '/api/position/10years';
 
 }

@@ -46,7 +46,7 @@ class MessageReceiver(private val eventStore: EventStore) {
     }
 
     private fun store(payload: JsonObject): Publisher<Success> {
-        return this. eventStore.insert(payload)
+        return this.eventStore.insert(payload)
     }
 
     private fun parseJsonObject(payload: String): JsonObject {
