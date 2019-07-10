@@ -5,8 +5,8 @@ import java.time.LocalDateTime
 
 data class TimeBasedIdentifier(val time: LocalDateTime) : TemporalIdentifier<TimeBasedIdentifier> {
 
-    override fun isAfter(other: TimeBasedIdentifier): Boolean {
-        return this.time.isAfter(other.time)
+    override fun isAfter(identifier: TimeBasedIdentifier): Boolean {
+        return this.time.isAfter(identifier.time)
     }
 
 }
