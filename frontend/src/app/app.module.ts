@@ -22,9 +22,12 @@ import {WelcomeComponent} from './view/welcome/welcome.component';
 import {WindCockpitComponent} from './view/wind-cockpit/wind-cockpit.component';
 import {WindCockpitChartComponent} from './charts/wind-cockpit-chart/wind-cockpit-chart.component';
 import {WindCockpitService} from "./service/wind-cockpit.service";
-import { GoogleMapsChartComponent } from './charts/google-maps-chart/google-maps-chart.component';
-import {AgmCoreModule} from "@agm/core";
+import {GoogleMapsChartComponent} from './charts/google-maps-chart/google-maps-chart.component';
+import {AgmCoreModule, LAZY_MAPS_API_CONFIG} from "@agm/core";
 import {MapViewComponent} from "./view/map-view/map-view.component";
+import {EnvVarService} from "./core/env-var.service";
+import {GoogleMapsConfig} from "./core/google-maps.config";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -40,6 +43,7 @@ import {MapViewComponent} from "./view/map-view/map-view.component";
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
@@ -52,12 +56,12 @@ import {MapViewComponent} from "./view/map-view/map-view.component";
     MatSnackBarModule,
     MatCardModule,
     LayoutModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'tbd'
-    })
+    AgmCoreModule.forRoot()
   ],
   providers: [
-     WindCockpitService,
+    {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
+    WindCockpitService,
+    EnvVarService
   ],
   bootstrap: [AppComponent]
 })
