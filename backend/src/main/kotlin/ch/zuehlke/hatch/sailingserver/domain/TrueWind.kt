@@ -10,11 +10,22 @@ data class TrueWind(val speed: Double, val direction: Radiant, val angle: Radian
 
     companion object {
         fun from(speedOverGround: Double, courseOverGround: Radiant, apparentWind: Wind, heading: Radiant): TrueWind {
-            val u = speedOverGround * sin(courseOverGround.value) - apparentWind.speed * sin(apparentWind.radiant.value)
-            val v = speedOverGround * cos(courseOverGround.value) - apparentWind.speed * cos(apparentWind.radiant.value)
+            var apparentWindAngle = apparentWind.radiant.value
+            val apparentWindDirection = heading.value - apparentWindAngle
+
+            var cog = courseOverGround.value
+            if (apparentWindAngle > PI / 2 && apparentWindAngle < 1.5 * PI) {
+                cog = cog - PI
+            }
+
+            val u = speedOverGround * sin(cog) - apparentWind.speed * sin(apparentWindDirection)
+            val v = speedOverGround * cos(cog) - apparentWind.speed * cos(apparentWindDirection)
 
             val trueWindSpeed = sqrt(u * u + v * v)
-            val trueWindDirection = atan(u / v)
+            var trueWindDirection = atan(u / v)
+            if (apparentWindAngle > PI) {
+                trueWindDirection = trueWindDirection - PI
+            }
             var trueWindAngle = abs(trueWindDirection - heading.value)
             if (trueWindAngle > Math.PI) {
                 trueWindAngle = 2 * Math.PI - trueWindAngle
