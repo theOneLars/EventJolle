@@ -1,6 +1,7 @@
 import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import * as d3 from "d3";
 import {DecimalPipe} from "@angular/common";
+import {Radiant} from "../../model/wind-cockpit-dto";
 
 @Component({
   selector: 'wind-cockpit-chart',
@@ -40,6 +41,9 @@ export class WindCockpitChartComponent implements OnInit {
 
   @Input() // unit: degree
   public apparentWindAngle: number;
+
+  @Input() // unit: degree
+  public trueWindAngle: number;
 
   @Input()
   public width: number = 500;
@@ -197,5 +201,9 @@ export class WindCockpitChartComponent implements OnInit {
    */
   private getFontSize(): string {
     return this.width / 15 + 'px';
+  }
+
+  private drawTWA(): string {
+
   }
 }
