@@ -10,7 +10,6 @@ import reactor.core.publisher.Flux
 import java.time.LocalDateTime
 
 @Component
-@Primary
 class PostgresEventStore(
         val repository: MeasurementRepository
 ) : EventStore {

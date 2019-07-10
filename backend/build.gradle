@@ -35,8 +35,6 @@ flyway {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'javax.websocket:javax.websocket-api:1.1'
-    implementation 'org.mongodb:mongodb-driver-reactivestreams:1.11.0'
-
     implementation 'org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.M1'
     implementation 'io.r2dbc:r2dbc-postgresql:1.0.0.M7'
 
@@ -45,7 +43,9 @@ dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation("org.flywaydb:flyway-core")
+    //the following dependency is only required for flyway
     compile group: 'org.postgresql', name: 'postgresql', version: '9.4.1212'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude module: 'junit'
