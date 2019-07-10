@@ -59,7 +59,7 @@ public class SimulatorRunner {
         Options options = new Options();
         CommandLineParser parser = new DefaultParser();
 
-        options.addOption(optionFileToRead);
+        options.addOption(optionFileToRead).addOption(optionInputThrottle);
 
         try {
             commandLine = parser.parse(options, args);
