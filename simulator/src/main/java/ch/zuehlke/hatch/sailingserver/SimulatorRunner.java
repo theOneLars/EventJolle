@@ -73,8 +73,8 @@ public class SimulatorRunner {
             }
 
         } catch (ParseException exception) {
-            System.out.print("Parse error: ");
-            System.out.println(exception.getMessage());
+            System.err.print("Parse error: ");
+            System.err.println(exception.getMessage());
         }
         return parameter;
     }

@@ -44,11 +44,10 @@ public class Simulator {
 
     public void sendFile(String filePath, int inputThrottle) {
 
-
         File file = new File(this.getClass().getResource(filePath).getPath());
 
         if (!file.exists() || !file.canRead()) {
-            System.out.println("File does not exist or is not readable");
+            System.err.println("File does not exist or is not readable");
         }
 
         List<File> files = new ArrayList<>();
@@ -74,7 +73,7 @@ public class Simulator {
                 timeJson = extractTimeJson(line);
 
                 while (line != null) {
-                    System.out.println(timeJson.getValue());
+//                    System.out.println(timeJson.getValue());
                     sendMessage(timeJson.getValue());
                     line = reader.readLine();
 
@@ -86,19 +85,19 @@ public class Simulator {
                         try {
                             Thread.sleep(timeDiff);
                         } catch (InterruptedException e) {
-                            System.out.println("Something went wrong while sleeping: " + e.getMessage());
+                            System.err.println("Something went wrong while sleeping: " + e.getMessage());
                         }
                     } else {
                         try {
                             Thread.sleep(inputThrottle);
                         } catch (InterruptedException e) {
-                            System.out.println("Something went wrong while sleeping: " + e.getMessage());
+                            System.err.println("Something went wrong while sleeping: " + e.getMessage());
                         }
                     }
                 }
                 reader.close();
             } catch (IOException e) {
-                System.out.println("Something went wrong while reading file: " + e.getMessage());
+                System.err.println("Something went wrong while reading file: " + e.getMessage());
             }
         }
     }
