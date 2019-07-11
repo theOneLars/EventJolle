@@ -1,5 +1,5 @@
 <agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
-  <agm-polyline *ngFor="let trip of trips; let tripIndex = index" [strokeColor]="getRandomColor(tripIndex)" >
+  <agm-polyline *ngFor="let trip of trips; let tripIndex = index" [strokeColor]="getTripColor(tripIndex)" >
     <agm-polyline-point *ngFor="let position of trip.positions"
                         [latitude]="position.latitude"
                         [longitude]="position.longitude">

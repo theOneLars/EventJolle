@@ -8,7 +8,7 @@ import {TripDto} from "../../model/trip-dto";
 })
 export class MultipleTripsMapsChartComponent implements OnInit {
 
-  CSS3_COLORS = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Violet', 'Black', 'White',
+  private CSS3_COLORS = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Violet', 'Black', 'White',
     'AliceBlue', 'AntiqueWhite', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
     'BlanchedAlmond', 'BlueViolet', 'Brown', 'BurlyWood', 'CadetBlue', 'Chartreuse', 'Chocolate', 'Coral',
     'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan', 'DarkBlue', 'DarkCyan', 'DarkGoldenRod', 'DarkGray', 'DarkGrey',
@@ -45,7 +45,7 @@ export class MultipleTripsMapsChartComponent implements OnInit {
   ngOnInit() {
   }
 
-  getRandomColor(index: number): string {
-    return this.CSS3_COLORS[index];
+  getTripColor(tripIndex: number): string {
+    return this.CSS3_COLORS[tripIndex];
   }
 }
