@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {AppConstants} from "../app.constants";
 import {PositionDto} from "../model/position-dto";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 
 declare var EventSource;
 
@@ -10,7 +11,7 @@ declare var EventSource;
 })
 export class PositionService {
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
   observeMessages(): Observable<PositionDto> {
@@ -23,4 +24,14 @@ export class PositionService {
     });
   }
 
+  loadPositionsFor(date: Date): Observable<PositionDto> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      }),
+      params: new HttpParams().set('date', date.toISOString().split('T')[0])
+    };
+
+    return this.http.get<PositionDto>(AppConstants.URL_POSITIONS_BY_DATE, httpOptions);
+  }
 }

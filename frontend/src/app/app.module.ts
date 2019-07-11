@@ -7,9 +7,10 @@ import {TopNavigationComponent} from './navigation/top-navigation/top-navigation
 import {
   MatButtonModule,
   MatCardModule,
+  MatDatepickerModule,
   MatIconModule,
   MatInputModule,
-  MatListModule,
+  MatListModule, MatNativeDateModule,
   MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
@@ -28,6 +29,9 @@ import {MapViewComponent} from "./view/map-view/map-view.component";
 import {EnvVarService} from "./core/env-var.service";
 import {GoogleMapsConfig} from "./core/google-maps.config";
 import {HttpClientModule} from "@angular/common/http";
+import { HistoryMapViewComponent } from './view/history-map-view/history-map-view.component';
+import {TripService} from "./service/trip.service";
+import { MultipleTripsMapsChartComponent } from './charts/multiple-trips-maps-chart/multiple-trips-maps-chart.component';
 
 export function initializeApp(envVarService: EnvVarService) {
   return (): Promise<any> => {
@@ -46,6 +50,8 @@ export function initializeApp(envVarService: EnvVarService) {
     WindCockpitChartComponent,
     GoogleMapsChartComponent,
     MapViewComponent,
+    HistoryMapViewComponent,
+    MultipleTripsMapsChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,14 +66,17 @@ export function initializeApp(envVarService: EnvVarService) {
     MatButtonModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatDatepickerModule,
     MatCardModule,
     LayoutModule,
+    MatNativeDateModule,
     AgmCoreModule.forRoot()
   ],
   providers: [
     {provide: APP_INITIALIZER, useFactory: initializeApp, deps: [EnvVarService], multi: true},
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
     WindCockpitService,
+    TripService,
     EnvVarService
   ],
   bootstrap: [AppComponent]

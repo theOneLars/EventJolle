@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-card-title>Historic Trips Map ({{from.toLocaleDateString()}} - {{to.toLocaleDateString()}})</mat-card-title>
+  <mat-card-content>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="fromPicker"
+             placeholder="Choose your trip start date"
+             [value]="from"
+             (dateChange)="changeFromDate($event)">
+      <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+      <mat-datepicker #fromPicker [startAt]="from"></mat-datepicker>
+    </mat-form-field>
+
+    &nbsp;
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="toPicker"
+             placeholder="Choose your trip end date"
+             [value]="to"
+             (dateChange)="changeToDate($event)">
+      <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+      <mat-datepicker #toPicker [startAt]="to"></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="loadTrips()">Load</button>
+
+    <multiple-trips-maps-chart *ngIf="trips.length"
+                               [latitude]="latitude"
+                               [longitude]="longitude"
+                               [trips]="trips">
+    </multiple-trips-maps-chart>
+  </mat-card-content>
+</mat-card>
