@@ -15,7 +15,6 @@ export class EnvVarService {
     const httpObservable = this.http.get('/environments/env-vars.json');
 
     httpObservable.subscribe((vars: any) => {
-      debugger;
       this.apiKey = vars.googleApiKey;
     });
 
