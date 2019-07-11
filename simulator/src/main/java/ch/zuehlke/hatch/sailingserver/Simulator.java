@@ -60,32 +60,32 @@ public class Simulator {
 
         files.sort((file1, file2) -> file2.getName().compareTo(file1.getName()));
 
-        BufferedReader reader;
-
         for (File singleFile : files) {
             System.out.println("Processing file: " + singleFile.getName());
-            try {
-                reader = new BufferedReader(new FileReader(singleFile));
-                String line = reader.readLine();
-                Pair<Long, String> timeJson = extractTimeJson(line);
+            try (BufferedReader reader = new BufferedReader(new FileReader(singleFile))) {
+                long timePreviousLine = 0;
 
-                long timeNow, timeDiff;
+                String line;
 
-                while (StringUtils.isNotBlank(line)) {
-                    System.out.println(timeJson.getValue());
-                    sendMessage(timeJson.getValue());
+                do {
                     line = reader.readLine();
-                    timeJson = extractTimeJson(line);
+                    if (StringUtils.isBlank(line)) {
+                        continue;
+                    }
+
+                    Pair<Long, String> timeJson = extractTimeJson(line);
+//                    System.out.println(timeJson.getValue());
+                    sendMessage(timeJson.getValue());
 
                     if (inputThrottle == -1) {
-                        timeNow = timeJson.getKey();
-                        timeDiff = timeJson.getKey() - timeNow;
-                        timeDiff = timeDiff > 0 ? timeDiff : 0;
+                        Long timeCurrentLine = timeJson.getKey();
+                        timePreviousLine = (timePreviousLine == 0 ? timeCurrentLine : timePreviousLine);
                         try {
-                            Thread.sleep(timeDiff);
+                            Thread.sleep(calculateWaitTime(timePreviousLine, timeCurrentLine));
                         } catch (InterruptedException e) {
                             System.err.println("Something went wrong while sleeping: " + e.getMessage());
                         }
+                        timePreviousLine = timeCurrentLine;
                     } else {
                         try {
                             Thread.sleep(inputThrottle);
@@ -93,12 +93,16 @@ public class Simulator {
                             System.err.println("Something went wrong while sleeping: " + e.getMessage());
                         }
                     }
-                }
-                reader.close();
+                } while(StringUtils.isNotBlank(line));
             } catch (IOException e) {
                 System.err.println("Something went wrong while reading file: " + e.getMessage());
             }
         }
+    }
+
+    private long calculateWaitTime(long timePreviousLine, Long timeCurrentLine) {
+        long timeDiff = timeCurrentLine - timePreviousLine;
+        return timeDiff > 0 ? timeDiff : 0;
     }
 
     /**
