@@ -1,9 +1,12 @@
-<agm-map [latitude]="latitude" [zoom]="zoom" [longitude]="longitude">
-  <agm-marker  [latitude]="latitude"
-               [longitude]="longitude"
-  >Current Position</agm-marker>
+<agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+  <agm-marker [latitude]="latitude"
+              [longitude]="longitude">
+    <agm-info-window [disableAutoPan]="true">
+      Your current location
+    </agm-info-window>
+  </agm-marker>
 
-  <agm-polyline strokeColor="red" >
+  <agm-polyline strokeColor="red">
     <agm-polyline-point *ngFor="let position of positions"
                         [latitude]="position.latitude"
                         [longitude]="position.longitude">
