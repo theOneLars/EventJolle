@@ -11,12 +11,14 @@ internal class LiveCacheTest {
 
     @Test
     fun testCache() {
-
-        // C, D, E
-        val liveData = Flux.interval(Duration.ofSeconds(1)).map { (67+it).toChar() }.take(3)
+        // Live Stream: C, D, E
+        val liveData = Flux.interval(Duration.ofSeconds(1))
+                .map { (67+it).toChar() }
+                .take(3)
         val now = LocalDateTime.now()
         val liveCache = LiveCache(liveData) { char -> TimeBasedIdentifier(now.plusDays(char.toLong())) }
 
+        // Repo Stream: A, B, C
         val repoStream = Flux.just('A', 'B', 'C')
         val liveStream = liveCache.withSnapshot(repoStream)
         StepVerifier.create(liveStream.log())
@@ -27,6 +29,7 @@ internal class LiveCacheTest {
                 .expectNext('E')
                 .verifyComplete()
 
+        // Repo Stream: A, B, C, D
         val secondRepoStream = Flux.just('A', 'B', 'C', 'D')
         val secondLiveStream = liveCache.withSnapshot(secondRepoStream)
         StepVerifier.create(secondLiveStream.log())
@@ -38,6 +41,7 @@ internal class LiveCacheTest {
                 .verifyComplete()
 
 
+        // Repo Stream: A, B
         val thirdRepoStream = Flux.just('A','B')
         val thirdLiveStream = liveCache.withSnapshot(thirdRepoStream)
         StepVerifier.create(thirdLiveStream.log())
@@ -50,13 +54,37 @@ internal class LiveCacheTest {
     }
 
     @Test
+    fun testCacheWithDelayedLiveData() {
+        // Live Stream: C, D, E
+        val liveData = Flux.interval(Duration.ofSeconds(5), Duration.ofSeconds(1))
+                .map { (67+it).toChar() }
+                .take(3)
+        val now = LocalDateTime.now()
+        val liveCache = LiveCache(liveData) { char -> TimeBasedIdentifier(now.plusDays(char.toLong())) }
+
+        // Repo Stream: A, B, C
+        val repoStream = Flux.just('A', 'B', 'C')
+
+        val liveStream = liveCache.withSnapshot(repoStream)
+        StepVerifier.create(liveStream.log())
+                .expectNext('A')
+                .expectNext('B')
+                .expectNext('C')
+                .expectNext('D')
+                .expectNext('E')
+                .verifyComplete()
+    }
+
+    @Test
     fun testCacheWithObjects() {
 
         // C, D, E
-        val liveData = Flux.interval(Duration.ofSeconds(1)).map { Pair(it, (67+it).toChar()) }.take(3)
+        val liveData = Flux.interval(Duration.ofSeconds(1))
+                .map { Pair(it, (67+it).toChar()) }
+                .take(3)
 
         val now = LocalDateTime.now()
-        val liveCache = LiveCache(liveData, { pair -> TimeBasedIdentifier(now.plusDays(pair.first)) })
+        val liveCache = LiveCache(liveData) { pair -> TimeBasedIdentifier(now.plusDays(pair.first)) }
 
         val repoStream = Flux.just(Pair(-2L,'A'), Pair(-1L,'B'), Pair(0L,'C'))
         val liveStream = liveCache.withSnapshot(repoStream)
