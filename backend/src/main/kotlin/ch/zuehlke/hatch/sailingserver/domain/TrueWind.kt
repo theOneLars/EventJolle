@@ -1,6 +1,6 @@
 package ch.zuehlke.hatch.sailingserver.domain
 
-import kotlin.math.*
+import java.lang.Math.*
 
 /***
  * @param direction is relative to north (not related to the boat's heading)
@@ -9,28 +9,18 @@ import kotlin.math.*
 data class TrueWind(val speed: Double, val direction: Radiant, val angle: Radiant) {
 
     companion object {
-        fun from(speedOverGround: Double, courseOverGround: Radiant, apparentWind: Wind, heading: Radiant): TrueWind {
-            var apparentWindAngle = apparentWind.radiant.value
-            val apparentWindDirection = heading.value - apparentWindAngle
-
-            var cog = courseOverGround.value
-            if (apparentWindAngle > PI / 2 && apparentWindAngle < 1.5 * PI) {
-                cog = cog - PI
-            }
-
-            val u = speedOverGround * sin(cog) - apparentWind.speed * sin(apparentWindDirection)
-            val v = speedOverGround * cos(cog) - apparentWind.speed * cos(apparentWindDirection)
-
-            val trueWindSpeed = sqrt(u * u + v * v)
-            var trueWindDirection = atan(u / v)
-            if (apparentWindAngle > PI) {
-                trueWindDirection = trueWindDirection - PI
-            }
-            var trueWindAngle = abs(trueWindDirection - heading.value)
-            if (trueWindAngle > Math.PI) {
-                trueWindAngle = 2 * Math.PI - trueWindAngle
-            }
-
+        /***
+         * Note: The formulas used here are based on StarpathTrueWind (@see https://www.starpath.com/freeware/true_wind.htm).
+         * The formula is only accurate if the course over ground (COG) and magnetic heading (MH) are close to each other.
+         *
+         * However, if COG and MH differ significantly a more complex vector solution is needed (@see https://www.bwsailing.com/cc/2017/05/calculating-the-true-wind-and-why-it-matters/)
+         * In the more complex case the magneticHeading is needed to calculate the true wind.
+         */
+        fun from(speedOverGround: Double, courseOverGround: Radiant, apparentWind: Wind, magneticHeading: Radiant): TrueWind {
+            val trueWindSpeed = sqrt(pow(speedOverGround, 2.0) + pow(apparentWind.speed, 2.0) - (2 * speedOverGround * apparentWind.speed * cos(apparentWind.radiant.value)))
+            val beta = (pow(apparentWind.speed, 2.0) - pow(trueWindSpeed, 2.0) - pow(speedOverGround, 2.0)) / (2 * trueWindSpeed * speedOverGround)
+            val trueWindAngle = acos(beta)
+            val trueWindDirection = courseOverGround.value + trueWindAngle
             return TrueWind(trueWindSpeed, Radiant(trueWindDirection), Radiant(trueWindAngle))
         }
     }
