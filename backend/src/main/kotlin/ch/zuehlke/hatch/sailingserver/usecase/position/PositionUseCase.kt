@@ -18,8 +18,8 @@ class PositionUseCase(val positionRepository: CompressedPositionRepository) {
                 .map { PositionDto(it.timestamp, it.longitude, it.latitude) }
     }
 
-    fun getLivePositionsOfToday(): Flux<PositionDto> {
-        return positionRepository.getCompressedLivePositionStream()
+    fun getTodayLivePositions(): Flux<PositionDto> {
+        return positionRepository.getCompressedTodayLivePositionStream()
                 .map { PositionDto(it.timestamp, it.longitude, it.latitude) }
     }
 

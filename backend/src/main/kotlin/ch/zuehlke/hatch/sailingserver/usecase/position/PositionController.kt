@@ -18,7 +18,7 @@ class PositionController(
     fun getLast10Years() = positionUseCase.getPositionsOfLast10Years()
 
     @GetMapping(path = ["today"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun getToday() = positionUseCase.getLivePositionsOfToday()
+    fun getToday() = positionUseCase.getTodayLivePositions()
 
     @GetMapping(path = ["byDate"])
     fun getForDate(@RequestParam("date")

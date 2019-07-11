@@ -20,7 +20,7 @@ class CompressedPositionRepository(
                 .filter { filter.accept(it) }
     }
 
-    fun getCompressedLivePositionStream(): Flux<PositionMeasurement> {
+    fun getCompressedTodayLivePositionStream(): Flux<PositionMeasurement> {
         val filter = PositionFilter(Duration.ofSeconds(60))
 
         return this.positionRepository.getPositions(LocalDate.now().atStartOfDay())
