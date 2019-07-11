@@ -10,7 +10,6 @@ export class GoogleMapsConfig implements LazyMapsAPILoaderConfigLiteral {
   }
 
   get apiKey() {
-    debugger;
     return this.envVarService.apiKey;
   }
 
