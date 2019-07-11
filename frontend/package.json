@@ -3,15 +3,16 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config=proxy.conf.json",
-    "build": "ng build",
+    "start": "npm run generate-env && ng serve --proxy-config=proxy.conf.json",
+    "build": "npm run generate-env && ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "dist": "ng build --prod",
+    "dist": "npm run generate-env && ng build --prod",
     "e2e-without-server": "ng e2e --dev-server-target",
     "ci-test": "ng test --watch=false --browsers=ChromeHeadless",
-    "ci-e2e": "ng e2e --dev-server-target --protractor-config e2e/protractor-ci.conf.js"
+    "ci-e2e": "ng e2e --dev-server-target --protractor-config e2e/protractor-ci.conf.js",
+    "generate-env": "node ./build-scripts/generate-env-properties.js"
   },
   "private": true,
   "dependencies": {

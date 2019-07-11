@@ -1,7 +1,4 @@
-import { Component } from '@angular/core';
-import {AppConstants} from "./app.constants";
-import {RxStompService} from "@stomp/ng2-stompjs";
-import {Subscription} from "rxjs";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',

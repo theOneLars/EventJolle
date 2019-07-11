@@ -5,10 +5,12 @@ import {EnvVarService} from "./env-var.service";
 @Injectable()
 export class GoogleMapsConfig implements LazyMapsAPILoaderConfigLiteral {
 
+
   constructor(private envVarService: EnvVarService) {
   }
 
   get apiKey() {
+    debugger;
     return this.envVarService.apiKey;
   }
 

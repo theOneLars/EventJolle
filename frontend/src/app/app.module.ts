@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -28,6 +28,12 @@ import {MapViewComponent} from "./view/map-view/map-view.component";
 import {EnvVarService} from "./core/env-var.service";
 import {GoogleMapsConfig} from "./core/google-maps.config";
 import {HttpClientModule} from "@angular/common/http";
+
+export function initializeApp(envVarService: EnvVarService) {
+  return (): Promise<any> => {
+    return envVarService.load().toPromise();
+  }
+}
 
 @NgModule({
   declarations: [
@@ -59,6 +65,7 @@ import {HttpClientModule} from "@angular/common/http";
     AgmCoreModule.forRoot()
   ],
   providers: [
+    {provide: APP_INITIALIZER, useFactory: initializeApp, deps: [EnvVarService], multi: true},
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
     WindCockpitService,
     EnvVarService

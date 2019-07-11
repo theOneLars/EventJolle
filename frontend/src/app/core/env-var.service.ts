@@ -9,11 +9,17 @@ export class EnvVarService {
   public apiKey = 'tbd';
 
   constructor(private http: HttpClient) {
-    // debugger;
-    // this.http.get('/env-vars.json').subscribe(vars => {
-    //   // Todo: get api key from env vars
-    //   debugger;
-    // });
+  }
+
+  public load() {
+    const httpObservable = this.http.get('/environments/env-vars.json');
+
+    httpObservable.subscribe((vars: any) => {
+      debugger;
+      this.apiKey = vars.googleApiKey;
+    });
+
+    return httpObservable;
   }
 
 
