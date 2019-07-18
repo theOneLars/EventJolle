@@ -69,7 +69,9 @@ public class Simulator {
                 String line = reader.readLine();
                 Pair<Long, String> timeJson = extractTimeJson(line);
 
-                long timeNow, timeDiff;
+                long timeNow, timeDiff, lastTime;
+
+                lastTime = timeJson.getKey();
 
                 while (StringUtils.isNotBlank(line)) {
                     System.out.println(timeJson.getValue());
@@ -79,8 +81,9 @@ public class Simulator {
 
                     if (inputThrottle == -1) {
                         timeNow = timeJson.getKey();
-                        timeDiff = timeJson.getKey() - timeNow;
+                        timeDiff =  timeNow - lastTime;
                         timeDiff = timeDiff > 0 ? timeDiff : 0;
+                        lastTime = timeNow;
                         try {
                             Thread.sleep(timeDiff);
                         } catch (InterruptedException e) {
